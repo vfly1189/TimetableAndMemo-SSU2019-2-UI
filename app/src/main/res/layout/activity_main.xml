@@ -16,6 +16,8 @@
             android:layout_weight="1"
             android:text="TIMETABLE TITLE" />
         <Button
+            android:id="@+id/directAdd"
+            android:onClick="onClick"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:text="ADD" />
