@@ -23,66 +23,59 @@
             android:text="ADD" />
     </LinearLayout>
 
-<!--    시간표 자체를 담는 레이아웃-->
-    <GridLayout
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:columnCount="6">
-
-<!--        요일-->
-        <Space />
-        <TextView
-            android:layout_columnWeight="1"
-            android:text="MON"
-            android:textAlignment="center" />
-        <TextView
-            android:layout_columnWeight="1"
-            android:text="TUE"
-            android:textAlignment="center" />
-        <TextView
-            android:layout_columnWeight="1"
-            android:text="WED"
-            android:textAlignment="center" />
-        <TextView
-            android:layout_columnWeight="1"
-            android:text="THU"
-            android:textAlignment="center" />
-        <TextView
-            android:layout_columnWeight="1"
-            android:text="FRI"
-            android:textAlignment="center" />
-
-<!--        시간별 행-->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_rowWeight="1"
-            android:text="9" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_rowWeight="1"
-            android:text="10" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_rowWeight="1"
-            android:text="11" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-        <Space android:layout_columnWeight="1" />
-    </GridLayout>
+        android:layout_height="match_parent">
+        <TableRow>
+            <Space/>
+            <TextView android:text="MON" android:layout_weight="1"/>
+            <TextView android:text="TUE" android:layout_weight="1"/>
+            <TextView android:text="WED" android:layout_weight="1"/>
+            <TextView android:text="THU" android:layout_weight="1"/>
+            <TextView android:text="FRI" android:layout_weight="1"/>
+        </TableRow>
+        <TableRow android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/timetable_column_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/TimeColumnElement"
+                    android:text="9"/>
+                <TextView
+                    style="@style/TimeColumnElement"
+                    android:text="10"/>
+                <TextView
+                    style="@style/TimeColumnElement"
+                    android:text="11"/>
+            </LinearLayout>
+            <GridLayout
+                android:id="@+id/timetable_column_MON"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_column="1"/>
+            <GridLayout
+                android:id="@+id/timetable_column_TUE"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_column="1"/>
+            <GridLayout
+                android:id="@+id/timetable_column_WED"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_column="1"/>
+            <GridLayout
+                android:id="@+id/timetable_column_THU"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_column="1"/>
+            <GridLayout
+                android:id="@+id/timetable_column_FRI"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_column="1"/>
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>
