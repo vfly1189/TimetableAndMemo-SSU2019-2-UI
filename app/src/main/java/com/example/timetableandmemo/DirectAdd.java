@@ -4,11 +4,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -16,6 +19,10 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class DirectAdd extends AppCompatActivity {
+
+    InputMethodManager imm;
+
+    LinearLayout fLL;
 
     EditText lectureName;
     EditText professorName;
@@ -32,6 +39,10 @@ public class DirectAdd extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direct_add);
+
+        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        fLL = (LinearLayout)findViewById(R.id.firstLL);
 
         lectureName = (EditText)findViewById(R.id.lectureName);
         className  = (EditText)findViewById(R.id.className);
@@ -64,6 +75,16 @@ public class DirectAdd extends AppCompatActivity {
             {
                 //데이터 넘겨줘야됨
                 finish();
+            }
+        });
+
+        fLL.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                imm.hideSoftInputFromWindow(lectureName.getWindowToken(),0);
+                imm.hideSoftInputFromWindow(professorName.getWindowToken(),0);
+                imm.hideSoftInputFromWindow(className.getWindowToken(),0);
             }
         });
     }
