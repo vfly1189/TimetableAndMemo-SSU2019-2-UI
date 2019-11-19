@@ -8,11 +8,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!--timetable_column_time의 하위항목 스타일-->
-    <style name="TimeColumnElement">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">1</item>
-    </style>
-
 </resources>
