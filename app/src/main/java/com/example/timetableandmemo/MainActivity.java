@@ -2,15 +2,12 @@ package com.example.timetableandmemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +45,4 @@ public class MainActivity extends AppCompatActivity {
             ttManager.setTimetableColumn_weekdays(this, timetableColumn_weekdays[i]);
         }
     }
-
-
 }
