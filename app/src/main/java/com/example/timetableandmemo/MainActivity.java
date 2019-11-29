@@ -13,8 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button directAdd;
     LinearLayout timetableColumn_time;
-    RelativeLayout[] timetableColumn_weekdays = new RelativeLayout[5];
-    TimeTableManager ttManager = new TimeTableManager("Example Title", 9, 13);
+    GridLayout[] timetableColumn_weekdays = new GridLayout[5];
 
     GridLayout[] timetableColumn_weekdays = new GridLayout[5];
 
