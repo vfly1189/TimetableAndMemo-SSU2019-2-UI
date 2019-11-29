@@ -8,6 +8,8 @@ public class Subject {
     String mDay2;
     String mDay3;
     String mDay4;
+    String mRoom1;
+    String mRoom2;
 
     int mCshour=-1;
     int mCsmin=-1;

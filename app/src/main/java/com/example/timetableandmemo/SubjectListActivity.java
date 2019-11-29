@@ -22,15 +22,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.security.auth.Subject;
+//import javax.security.auth.Subject;
 
 public class SubjectListActivity extends AppCompatActivity {
 
     private static final String DATABASE_NAME = "SubjectDB.db";
     private static final String PACKAGE_DIR = "/data/data/com.example.timetableandmemo/databases";
-    private static final String MYFILENAME = "test";
+    private static final String MYFILENAME = "Subject";
 
-    FrameLayout root;
 
     ListView mListView = null;
     BaseAdapterEx mAdapter = null;
@@ -74,8 +73,7 @@ public class SubjectListActivity extends AppCompatActivity {
         mDataShow = new ArrayList<Subject>();
 
         SQLiteDatabase db = SQLiteDatabase.openDatabase(PACKAGE_DIR + "/" + MYFILENAME, null, SQLiteDatabase.OPEN_READONLY);
-        Cursor cursor = db.rawQuery("select S_NAME,NAME,TIME,Day1,Day2,Day3,Day4,C_Shour,C_Smin,C_Fhour,C_Fmin,Shour1,Smin1,Fhour1,Fmin1,Shour2,Smin2,Fhour2,Fmin2 from DataTable", null);
-
+        Cursor cursor = db.rawQuery("select S_NAME,NAME,TIME,Day1,Day2,Day3,Day4,C_Shour,C_Smin,C_Fhour,C_Fmin,Shour1,Smin1,Fhour1,Fmin1,Shour2,Smin2,Fhour2,Fmin2,Room1,Room2 from SubjectData", null);
         while (cursor.moveToNext()) {
             Subject subject = new Subject();
 
@@ -101,7 +99,8 @@ public class SubjectListActivity extends AppCompatActivity {
             subject.mSmin2 = cursor.getInt(16);
             subject.mFhour2 = cursor.getInt(17);
             subject.mFmin2 = cursor.getInt(18);
-
+            subject.mRoom1 = cursor.getString(19);
+            subject.mRoom2 = cursor.getString(20);
 
             mData.add(subject);
         }
@@ -152,27 +151,6 @@ public class SubjectListActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-    public void Setting(View v){
-        FrameLayout Root = (FrameLayout) findViewById(R.id.Root);
-
-        Root.addView(v);
-    }
-
-
-    @Override
-    public void onClick(Subject subject) {
-        Log.d("hi", subject.getmName());
-        String test = subject.getmSname()+"\n"+subject.getmName();
-        root  = (FrameLayout)findViewById(R.id.Root);
-        Button bt1 = new Button(this);
-        Sublist test1 = new Sublist(this,subject);
-        bt1.setText(test);
-        FrameLayout.LayoutParams bt1LP = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT);
-        bt1LP.topMargin=subject.mShour1*10;
-        root.addView(test1,bt1LP);
-        //root.addView(bt1,bt1LP);
 
     }
 
-    }
-}
