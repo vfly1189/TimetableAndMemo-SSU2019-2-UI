@@ -4,19 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity {
 
     Button directAdd;
     LinearLayout timetableColumn_time;
+<<<<<<< HEAD
     RelativeLayout[] timetableColumn_weekdays = new RelativeLayout[5];
     TimeTableManager ttManager = new TimeTableManager("Example Title", 9, 13);
     
+=======
+    GridLayout[] timetableColumn_weekdays = new GridLayout[5];
+
+>>>>>>> parent of 924982b... MainActivity Update
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         timetableColumn_weekdays[2] = findViewById(R.id.timetable_column_WED);
         timetableColumn_weekdays[3] = findViewById(R.id.timetable_column_THU);
         timetableColumn_weekdays[4] = findViewById(R.id.timetable_column_FRI);
+
+        TimeTableManager ttManager = new TimeTableManager("Example Title", 9, 11);
 
         directAdd = (Button)findViewById(R.id.directAdd);
         directAdd.setOnClickListener(new View.OnClickListener()
@@ -41,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ttManager.fillTimetableColumn_time(this, timetableColumn_time);
-        ttManager.setColumnHeight(timetableColumn_time.getMeasuredHeight());
-        Log.d("테스트", String.format("%d", ttManager.getColumnHeight()));
+        for (int i = 0; i < 5; i ++) {
+            ttManager.setTimetableColumn_weekdays(this, timetableColumn_weekdays[i]);
+        }
     }
 }
