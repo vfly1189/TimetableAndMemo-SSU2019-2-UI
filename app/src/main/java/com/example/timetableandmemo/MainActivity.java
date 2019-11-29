@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout[] timetableColumn_weekdays = new RelativeLayout[5];
     TimeTableManager ttManager = new TimeTableManager("Example Title", 9, 13);
 
+
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
