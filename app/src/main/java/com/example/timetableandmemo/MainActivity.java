@@ -13,14 +13,11 @@ public class MainActivity extends AppCompatActivity {
 
     Button directAdd;
     LinearLayout timetableColumn_time;
-<<<<<<< HEAD
     RelativeLayout[] timetableColumn_weekdays = new RelativeLayout[5];
     TimeTableManager ttManager = new TimeTableManager("Example Title", 9, 13);
-    
-=======
+
     GridLayout[] timetableColumn_weekdays = new GridLayout[5];
 
->>>>>>> parent of 924982b... MainActivity Update
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
