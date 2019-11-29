@@ -1,16 +1,16 @@
 package com.example.timetableandmemo;
 
 import android.content.Context;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
 public class TimeTableManager {
 
     private String title;
-    private int startTime;
-    private int endTime;
+    private int startTime, endTime;
+    private int columnHeight;
 
     TimeTableManager() {
         this.title = "DEFAULT_TABLE_TITLE";
@@ -26,13 +26,16 @@ public class TimeTableManager {
         this.endTime = endTime;
     }
 
+    public void setTitle(String title) { this.title = title; }
     public void setStartTime(int startTime) {
         this.startTime = startTime;
     }
-
     public void setEndTime(int endTime) {
         this.endTime = endTime;
     }
+    public void setColumnHeight(int columnHeight) { this.columnHeight = columnHeight; }
+
+    public int getColumnHeight() { return this.columnHeight; }
 
     //시작 시간 ~ 끝나는 시간으로 첫 열 채우기
     public void fillTimetableColumn_time(Context context, LinearLayout ttLayout) {
@@ -45,7 +48,7 @@ public class TimeTableManager {
     }
 
     //시간표의 각 열을 5분단위의 Space로 채움
-    public void setTimetableColumn_weekdays(Context context, GridLayout ttLayout) {
+    public void createTimetableColumn_weekdays(Context context, RelativeLayout ttLayout) {
         int numberOfRows_5min = (this.endTime - this.startTime) * 12;
         for (int i = 0; i < numberOfRows_5min; i++) {
             Space minSpace = new Space(context);
