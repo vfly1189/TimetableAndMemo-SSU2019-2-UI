@@ -1,2 +1,2 @@
-include ':app', ':pmp'
+include ':app'
 rootProject.name='TimetableAndMemo'
