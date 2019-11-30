@@ -21,6 +21,10 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+
 public class DirectAdd extends AppCompatActivity {
 
     Button addBtn;
@@ -67,7 +71,7 @@ public class DirectAdd extends AppCompatActivity {
                 }
 
                 //과목 set을 하나 만듬
-                SubjectSet subjectSet = new SubjectSet(10,lectureName.getText().toString(),professorName.getText().toString());
+                final SubjectSet subjectSet = new SubjectSet(lectureName.getText().toString(),professorName.getText().toString());
 
                 if(stack.empty())
                 {
@@ -137,9 +141,16 @@ public class DirectAdd extends AppCompatActivity {
                         k++;
                     }
 
+                    Realm.init(context);
+                    final Realm mRealm = Realm.getDefaultInstance();
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            mRealm.copyToRealm(subjectSet);
+                        }
+                    });
 
-
-                    finish();
+                    //finish();
                 }
             }
         });
@@ -167,6 +178,7 @@ public class DirectAdd extends AppCompatActivity {
         LinearLayout newInfo = new LinearLayout(context);
         LinearLayout.LayoutParams newInfoParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         newInfo.setOrientation(LinearLayout.HORIZONTAL);
+        newInfo.setLayoutParams(newInfoParams);
 
         //요일선택
         final Button setWeekDay = new Button(context);
