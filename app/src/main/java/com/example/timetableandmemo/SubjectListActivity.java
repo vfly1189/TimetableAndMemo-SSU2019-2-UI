@@ -152,5 +152,5 @@ public class SubjectListActivity extends AppCompatActivity {
     }
 
 
-    }
+}
 

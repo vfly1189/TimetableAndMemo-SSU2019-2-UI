@@ -1,6 +1,8 @@
 package com.example.timetableandmemo;
 
-public class SubjectBlock {
+import io.realm.RealmObject;
+
+public class SubjectBlock extends RealmObject{
     String classroomName; //강의실 이름
     String weekday; //요일
 
@@ -10,7 +12,7 @@ public class SubjectBlock {
     int fTime_hour; //끝나는 시각의 '시' 부분
     int fTime_min; //끝나는 시각의 '분' 부분
 
-
+    public SubjectBlock() {}
     SubjectBlock(String classroomName, String weekday, int sTime_hour, int sTime_min, int fTime_hour, int fTime_min)
     {
         this.classroomName = classroomName;
