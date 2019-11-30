@@ -2,42 +2,31 @@ package com.example.timetableandmemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextView timetableTitle;
     Button directAdd;
-    LinearLayout timetableColumn_time;
-    RelativeLayout[] timetableColumn_weekdays = new RelativeLayout[5];
-    TimeTableManager ttManager = new TimeTableManager("Example Title", 9, 13);
-
-
+    TableRow timetableContentRow;
+    LinearLayout timetableColumn_time; //시간표의 첫열(시간 구분선)
+    GridLayout[] timetableColumn_weekdays = new GridLayout[5]; //0: 월요일, 1: 화요일, 2: 수요일, 3: 목요일, 4: 금요일
+    TimeTableManager ttManager = new TimeTableManager();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        timetableColumn_time = findViewById(R.id.timetable_column_time);
-        timetableColumn_weekdays[0] = findViewById(R.id.timetable_column_MON);
-        timetableColumn_weekdays[1] = findViewById(R.id.timetable_column_TUE);
-        timetableColumn_weekdays[2] = findViewById(R.id.timetable_column_WED);
-        timetableColumn_weekdays[3] = findViewById(R.id.timetable_column_THU);
-        timetableColumn_weekdays[4] = findViewById(R.id.timetable_column_FRI);
+        timetableTitle = findViewById(R.id.timetable_title);
 
         directAdd = (Button)findViewById(R.id.directAdd);
         directAdd.setOnClickListener(new View.OnClickListener()
@@ -50,8 +39,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        timetableContentRow = findViewById(R.id.timetable_content_row);
+
+        timetableColumn_time = (LinearLayout) timetableContentRow.getChildAt(0);
+        for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (GridLayout) timetableContentRow.getChildAt(i + 1);
+
         ttManager.fillTimetableColumn_time(this, timetableColumn_time);
-        ttManager.setColumnHeight(timetableColumn_time.getMeasuredHeight());
-        Log.d("테스트", String.format("%d", ttManager.getColumnHeight()));
+        ttManager.applyTitle(timetableTitle);
+        for (int i = 0; i < 5; i++) ttManager.applyNumberOfColumnsBy5Minutes(timetableColumn_weekdays[i]);
+
+        //테스트 코드
+        Button tb1 = new Button(this);
+        GridLayout.Spec rowSpec = GridLayout.spec(3,5);
+        GridLayout.Spec columnSpec = GridLayout.spec(0);
+        GridLayout.LayoutParams gl = new GridLayout.LayoutParams(rowSpec, columnSpec);
+        gl.width = 0;
+        gl.setGravity(Gravity.FILL);
+        tb1.setText("1");
+        timetableColumn_weekdays[0].addView(tb1, gl);
     }
 }
