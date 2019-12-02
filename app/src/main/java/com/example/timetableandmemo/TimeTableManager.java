@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 public class TimeTableManager {
 
-    TimeTableManager() { this.init(); }
+    public TimeTableManager() { this.init(); }
 
     private String title = "DEFAULT TIMETABLE TITLE - TimeTableManager";
     private int startingHour = -1, endingHour = -1;

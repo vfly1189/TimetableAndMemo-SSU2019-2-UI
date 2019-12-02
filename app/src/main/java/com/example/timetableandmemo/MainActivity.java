@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import io.realm.Realm;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView timetableTitle;
