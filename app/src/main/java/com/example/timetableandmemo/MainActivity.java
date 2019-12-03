@@ -13,6 +13,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     TableRow timetableContentRow;
     LinearLayout timetableColumn_time; //시간표의 첫열(시간 구분선)
     GridLayout[] timetableColumn_weekdays = new GridLayout[5]; //0: 월요일, 1: 화요일, 2: 수요일, 3: 목요일, 4: 금요일
-    TimeTableManager ttManager = new TimeTableManager();
-    
+    TimeTableManager ttManager = new TimeTableManager(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         timetableColumn_time = (LinearLayout) timetableContentRow.getChildAt(0);
         for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (GridLayout) timetableContentRow.getChildAt(i + 1);
 
-        ttManager.fillTimetableColumn_time(this, timetableColumn_time);
+        ttManager.fillTimetableColumn_time(timetableColumn_time);
         ttManager.applyTitle(timetableTitle);
         for (int i = 0; i < 5; i++) ttManager.applyNumberOfColumnsBy5Minutes(timetableColumn_weekdays[i]);
 
