@@ -5,15 +5,19 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import io.realm.Realm;
+
 public class TimeTableManager {
 
     private String title = "DEFAULT TIMETABLE TITLE - TimeTableManager";
     private int startingHour = -1, endingHour = -1;
     private int numberOfHours;
     private Context context;
+    private Realm mRealm;
 
     public TimeTableManager(Context context) {
         this.setContext(context);
+        this.initRealm();
         this.setStartingHour(9);
         this.setEndingHour(12);
         this.setNumberOfHours();
@@ -27,7 +31,10 @@ public class TimeTableManager {
     private void setContext(Context context) { this.context = context; }
 
     //Realm 초기화
-
+    private void initRealm() {
+        Realm.init(this.context);
+        this.mRealm = Realm.getDefaultInstance();
+    }
 
     //시작 시간 ~ 끝나는 시간으로 첫 열 채우기
     public void fillTimetableColumn_time(LinearLayout ttLayout) {
