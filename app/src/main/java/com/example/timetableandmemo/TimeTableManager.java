@@ -13,28 +13,22 @@ public class TimeTableManager {
     private int startingHour = -1, endingHour = -1;
     private int numberOfHours;
     private Context context;
-    private Realm mRealm;
+    private Realm realm;
 
     public TimeTableManager(Context context) {
         this.setContext(context);
-        this.initRealm();
         this.setStartingHour(9);
         this.setEndingHour(12);
         this.setNumberOfHours();
     }
 
-    private void setTitle(String title) { this.title = title; }
-    private String getTitle() { return this.title; }
-    private void setStartingHour(int startingHour) { this.startingHour = startingHour; }
-    private void setEndingHour(int endingHour) { this.endingHour = endingHour; }
-    private void setNumberOfHours() { this.numberOfHours = this.endingHour - this.startingHour + 1; }
-    private void setContext(Context context) { this.context = context; }
-
-    //Realm 초기화
-    private void initRealm() {
-        Realm.init(this.context);
-        this.mRealm = Realm.getDefaultInstance();
-    }
+    public void setTitle(String title) { this.title = title; }
+    public String getTitle() { return this.title; }
+    public void setStartingHour(int startingHour) { this.startingHour = startingHour; }
+    public void setEndingHour(int endingHour) { this.endingHour = endingHour; }
+    public void setNumberOfHours() { this.numberOfHours = this.endingHour - this.startingHour + 1; }
+    public void setContext(Context context) { this.context = context; }
+    public void setRealm(Realm realm) { this.realm = realm; }
 
     //시작 시간 ~ 끝나는 시간으로 첫 열 채우기
     public void fillTimetableColumn_time(LinearLayout ttLayout) {
@@ -48,7 +42,7 @@ public class TimeTableManager {
 
     //Main Activity 화면의 시간표 제목 변경
     public void applyTitle(TextView titleTextView) {
-        titleTextView.setText(this.getTitle());
+        titleTextView.setText(this.title);
     }
 
     //요일별 과목 칸을 5분단위로 쪼개는 함수

@@ -1,10 +1,7 @@
 package com.example.timetableandmemo;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -12,8 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import io.realm.Realm;
-import io.realm.RealmList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,9 +27,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        timetableTitle = findViewById(R.id.timetable_title);
+        //Realm 초기화
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
 
+        //activity_main.xml에서 id로 객체 찾기
+        timetableTitle = findViewById(R.id.timetable_title);
         directAdd = (Button)findViewById(R.id.directAdd);
+        timetableContentRow = findViewById(R.id.timetable_content_row);
+
+        timetableColumn_time = (LinearLayout) timetableContentRow.getChildAt(0);
+        for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (GridLayout) timetableContentRow.getChildAt(i + 1);
+
+        //ADD 버튼 클릭시 동작
         directAdd.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -42,23 +50,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        timetableContentRow = findViewById(R.id.timetable_content_row);
-
-        timetableColumn_time = (LinearLayout) timetableContentRow.getChildAt(0);
-        for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (GridLayout) timetableContentRow.getChildAt(i + 1);
-
+        //시간표 화면 구성하기 - TimeTableManager 동작
+        ttManager.setRealm(realm);
         ttManager.fillTimetableColumn_time(timetableColumn_time);
         ttManager.applyTitle(timetableTitle);
         for (int i = 0; i < 5; i++) ttManager.applyNumberOfColumnsBy5Minutes(timetableColumn_weekdays[i]);
 
         //테스트 코드
-        Button tb1 = new Button(this);
-        GridLayout.Spec rowSpec = GridLayout.spec(3,5);
-        GridLayout.Spec columnSpec = GridLayout.spec(0);
-        GridLayout.LayoutParams gl = new GridLayout.LayoutParams(rowSpec, columnSpec);
-        gl.width = 0;
-        gl.setGravity(Gravity.FILL);
-        tb1.setText("1");
-        timetableColumn_weekdays[0].addView(tb1, gl);
+//        Button tb1 = new Button(this);
+//        GridLayout.Spec rowSpec = GridLayout.spec(3,5);
+//        GridLayout.Spec columnSpec = GridLayout.spec(0);
+//        GridLayout.LayoutParams gl = new GridLayout.LayoutParams(rowSpec, columnSpec);
+//        gl.width = 0;
+//        gl.setGravity(Gravity.FILL);
+//        tb1.setText("1");
+//        timetableColumn_weekdays[0].addView(tb1, gl);
+
+
+
     }
 }
