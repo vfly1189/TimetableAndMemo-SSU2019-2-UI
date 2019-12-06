@@ -37,7 +37,7 @@ public class DirectAdd extends AppCompatActivity {
     LinearLayout firstLL;
     Context context = this;
 
-    ArrayStack<LinearLayout> stack = new ArrayStack(10);
+    ArrayStack<LinearLayout> stack = new ArrayStack(20);
 
     int count = 0;
 
@@ -141,7 +141,7 @@ public class DirectAdd extends AppCompatActivity {
                         k++;
                     }
 
-                    Realm.init(context);
+                    //Realm.init(context);
                     final Realm mRealm = Realm.getDefaultInstance();
                     mRealm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -253,15 +253,12 @@ public class DirectAdd extends AppCompatActivity {
         LinearLayout.LayoutParams time2Pararms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         setTime2.setLayoutParams(time2Pararms);
 
-
-
         newInfo.addView(setWeekDay,weekDayParams);
         newInfo.addView(setTime1,time1Pararms);
         newInfo.addView(setTime2,time2Pararms);
 
         newInfoGroup.addView(setClassRoom,classRoomParams);
         newInfoGroup.addView(newInfo);
-
 
         firstLL.addView(newInfoGroup,newInfoGroupParams);
 

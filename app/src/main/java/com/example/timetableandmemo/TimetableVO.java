@@ -3,15 +3,15 @@ package com.example.timetableandmemo;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
-public class TimetableVO extends RealmObject {
+public class TimetableVO extends RealmObject{
     private String title;
     private RealmList<SubjectSet> subjectSetList;
 
-    public TimetableVO() {}
 
+    public TimetableVO() {}
     public TimetableVO(String title) {
-        this.subjectSetList = new RealmList<>();
-        this.title = title;
+       this.subjectSetList = new RealmList<>();
+       this.title = title;
     }
 
     public void setTitle(String title) { this.title = title; }

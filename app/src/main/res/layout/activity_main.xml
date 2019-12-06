@@ -16,10 +16,15 @@
             android:layout_weight="1"
             android:text="TIMETABLE TITLE" />
         <Button
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="SELECT"
+            android:id="@+id/selectAdd"/>
+        <Button
             android:id="@+id/directAdd"
             android:onClick="onClick"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
             android:text="ADD" />
     </LinearLayout>
 

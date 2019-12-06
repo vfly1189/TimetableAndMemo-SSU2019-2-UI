@@ -2,14 +2,16 @@ package com.example.timetableandmemo;
 
 import android.widget.Toast;
 
+import java.util.List;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class SubjectSet extends RealmObject{
 
-    public String subjectName; //과목명
-    public String profName; //교수명
-    public RealmList<SubjectBlock> sbList; //SubjectBlock의 리스트
+    private String subjectName; //과목명
+    private String profName; //교수명
+    private RealmList<SubjectBlock> sbList; //SubjectBlock의 리스트
 
 
     public SubjectSet() {}
@@ -39,5 +41,10 @@ public class SubjectSet extends RealmObject{
     {
        sbList.add(subjectBlock);
     }
-
+    public String getSubjectName() { return subjectName; }
+    public String getProfName() { return profName; }
+    public List<SubjectBlock> getSubjectBlocks()
+    {
+        return sbList;
+    }
 }
