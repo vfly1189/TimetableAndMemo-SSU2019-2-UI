@@ -93,6 +93,7 @@ public class TimeTableManager {
     //시작 시간 ~ 끝나는 시간으로 첫 열 채우기
     public void fillTimetableColumn_time(LinearLayout ttLayout) {
         LinearLayout.LayoutParams timeRowLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT , 0, 1);
+        ttLayout.removeAllViews();
         for (int i = this.startingHour; i <= this.endingHour; i++) {
             TextView timeRow = new TextView(this.context);
             timeRow.setText(String.format("%d", i));
@@ -104,6 +105,11 @@ public class TimeTableManager {
     public void applyTitle(TextView titleTextView) {
         titleTextView.setText(this.title);
     }
+
+    //요일별 과목 칸을 5분단위로 쪼개는 함수
+//    public void applyNumberOfColumnsBy5Minutes(GridLayout weekdayLayout) {
+//        weekdayLayout.setRowCount(numberOfHours * 4);
+//    }
 }
 
 class Block {

@@ -10,7 +10,6 @@ public class TimetableVO extends RealmObject {
     private String title;
     private RealmList<SubjectSet> subjectSetList;
 
-
     public void setId(int id) { this.id = id; }
     public TimetableVO() {}
     public TimetableVO(String title) {

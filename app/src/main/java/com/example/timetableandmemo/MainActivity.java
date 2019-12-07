@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             });
             ttManager.setCurrentTimetableVO(ttVO1);
             ttManager.setTitle();
+
             /// 테스트> ///
         }
 
@@ -108,11 +109,13 @@ public class MainActivity extends AppCompatActivity {
 //        timetableColumn_weekdays[0].addView(tb1, gl);
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
 
         //TimeTableManager 설정 및 동작
+
         ttManager.setCurrentTimetableVO(this.ttVO);
         ttManager.setTitle();
         ttManager.calculateStartingAndEndingTimes();
