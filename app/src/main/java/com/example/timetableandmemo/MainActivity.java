@@ -1,5 +1,6 @@
 package com.example.timetableandmemo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,10 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
     TextView timetableTitle;
     Button directAdd;
+    Button selectAdd;
     TableRow timetableContentRow;
     LinearLayout timetableColumn_time; //시간표의 첫열(시간 구분선)
     GridLayout[] timetableColumn_weekdays = new GridLayout[5]; //0: 월요일, 1: 화요일, 2: 수요일, 3: 목요일, 4: 금요일
     TimeTableManager ttManager = new TimeTableManager(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +41,15 @@ public class MainActivity extends AppCompatActivity {
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm realm = Realm.getInstance(config);
+        final Realm realm = Realm.getDefaultInstance();
 
         //activity_main.xml에서 id로 객체 찾기
-        timetableTitle = findViewById(R.id.timetable_title);
+        timetableTitle = (TextView)findViewById(R.id.timetable_title);
         directAdd = (Button)findViewById(R.id.directAdd);
-        timetableContentRow = findViewById(R.id.timetable_content_row);
+        timetableContentRow = (TableRow)findViewById(R.id.timetable_content_row);
+        selectAdd = (Button)findViewById(R.id.selectAdd);
+
+
 
         timetableColumn_time = (LinearLayout) timetableContentRow.getChildAt(0);
         for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (GridLayout) timetableContentRow.getChildAt(i + 1);
@@ -53,6 +61,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 Intent intent = new Intent(getApplicationContext(), DirectAdd.class);
+                startActivity(intent);
+            }
+        });
+        selectAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SubjectListActivity.class);
                 startActivity(intent);
             }
         });
@@ -101,4 +116,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

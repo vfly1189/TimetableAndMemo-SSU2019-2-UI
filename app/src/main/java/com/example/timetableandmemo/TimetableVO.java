@@ -8,9 +8,14 @@ public class TimetableVO extends RealmObject {
     private String title;
     private RealmList<SubjectSet> subjectSetList;
 
-    public TimetableVO() {}
 
     public void setId(int id) { this.id = id; }
+    public TimetableVO() {}
+    public TimetableVO(String title) {
+       this.subjectSetList = new RealmList<>();
+       this.title = title;
+    }
+
     public void setTitle(String title) { this.title = title; }
     public String getTitle() { return this.title; }
 
