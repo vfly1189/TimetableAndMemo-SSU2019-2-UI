@@ -68,9 +68,4 @@ public class TimeTableManager {
     public void applyTitle(TextView titleTextView) {
         titleTextView.setText(this.title);
     }
-
-    //요일별 과목 칸을 5분단위로 쪼개는 함수
-//    public void applyNumberOfColumnsBy5Minutes(GridLayout weekdayLayout) {
-//        weekdayLayout.setRowCount(numberOfHours * 4);
-//    }
 }

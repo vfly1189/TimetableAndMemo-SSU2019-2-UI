@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -24,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
     TableRow timetableWeekdaysRow;
     TableRow timetableContentRow;
     LinearLayout timetableColumn_time; //시간표의 첫열(시간 구분선)
-    GridLayout[] timetableColumn_weekdays = new GridLayout[5]; //0: 월요일, 1: 화요일, 2: 수요일, 3: 목요일, 4: 금요일
+    LinearLayout[] timetableColumn_weekdays = new LinearLayout[5]; //0: 월요일, 1: 화요일, 2: 수요일, 3: 목요일, 4: 금요일
     TimeTableManager ttManager = new TimeTableManager(this);
-
+    TimetableVO ttVO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         timetableContentRow = (TableRow)findViewById(R.id.timetable_content_row);
 
         //이후 사용할 timetableColumn_time과 timetableColumn_weekdays 객체찾기
-        timetableColumn_time = (LinearLayout) timetableContentRow.getChildAt(0);
-        for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (GridLayout) timetableContentRow.getChildAt(i + 1);
+        timetableColumn_time = (LinearLayout)timetableContentRow.getChildAt(0);
+        for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (LinearLayout)timetableContentRow.getChildAt(i + 1);
 
         //ADD 버튼 클릭시 동작
         directAdd.setOnClickListener(new View.OnClickListener()
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         if(!isTimetableVOExistInDB(realm)) {
             createTimetableVO(realm, 0, "Initial Title - MainActivity");
             /// 테스트< ///
-            final TimetableVO ttVO = realm.where(TimetableVO.class).equalTo("id", 0).findFirst();
+            final TimetableVO ttVO1 = realm.where(TimetableVO.class).equalTo("id", 0).findFirst();
 
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -85,30 +84,17 @@ public class MainActivity extends AppCompatActivity {
                     SubjectSet ss = new SubjectSet("과목과목", "교수교수님");
                     ss.add(sb1);
                     ss.add(sb2);
-
-                    ttVO.addSubjectSet(ss);
+                    ttVO1.addSubjectSet(ss);
                 }
             });
-
-            ttManager.setCurrentTimetableVO(ttVO);
+            ttManager.setCurrentTimetableVO(ttVO1);
             ttManager.setTitle();
             /// 테스트> ///
         }
 
         //DB에 저장되어있는 TimetableVO객체 가져오기
-        final TimetableVO ttVO = realm.where(TimetableVO.class).equalTo("id", 0).findFirst();
+        this.ttVO = realm.where(TimetableVO.class).equalTo("id", 0).findFirst();
 
-        //TimeTableManager 설정 및 동작
-        ttManager.setCurrentTimetableVO(ttVO);
-        ttManager.setTitle();
-        ttManager.calculateStartingAndEndingTimes();
-        ttManager.calculateNumberOfHours();
-
-        ttManager.applyTimetableWeekdaysRowText(timetableWeekdaysRow);
-        ttManager.applyTitle(timetableTitle);
-        ttManager.fillTimetableColumn_time(timetableColumn_time);
-
-//        for (int i = 0; i < 5; i++) ttManager.applyNumberOfColumnsBy5Minutes(timetableColumn_weekdays[i]);
 
         //테스트 코드
 //        Button tb1 = new Button(this);
@@ -119,6 +105,21 @@ public class MainActivity extends AppCompatActivity {
 //        gl.setGravity(Gravity.FILL);
 //        tb1.setText("1");
 //        timetableColumn_weekdays[0].addView(tb1, gl);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //TimeTableManager 설정 및 동작
+        ttManager.setCurrentTimetableVO(this.ttVO);
+        ttManager.setTitle();
+        ttManager.calculateStartingAndEndingTimes();
+        ttManager.calculateNumberOfHours();
+
+        ttManager.applyTimetableWeekdaysRowText(timetableWeekdaysRow);
+        ttManager.applyTitle(timetableTitle);
+        ttManager.fillTimetableColumn_time(timetableColumn_time);
 
         //Realm 객체 갯수 세는 테스트 코드
 //        RealmQuery<TimetableVO> query = realm.where(TimetableVO.class);
@@ -132,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
 //        RealmQuery<SubjectBlock> query3 = realm.where(SubjectBlock.class);
 //        RealmResults<SubjectBlock> results3 = query3.findAll();
 //        Log.d("SubjectBlock",String.format("%d개", results3.size()));
-
     }
 
     //RealmDB내에 TimetableVO객체가 존재하는지 확인
