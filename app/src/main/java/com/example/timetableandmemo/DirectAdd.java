@@ -141,7 +141,17 @@ public class DirectAdd extends AppCompatActivity {
                         k++;
                     }
 
+                    final Realm mRealm = Realm.getDefaultInstance();
+                    final TimetableVO ttVO = (TimetableVO)mRealm.where(TimetableVO.class).equalTo("id",0).findFirst();
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            ttVO.addSubjectSet(subjectSet);
+                        }
+                    });
+                    //Toast.makeText(getApplicationContext(),"test",Toast.LENGTH_SHORT).show();
                     //Realm.init(context);
+                    /*
                     final Realm mRealm = Realm.getDefaultInstance();
                     mRealm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -149,8 +159,8 @@ public class DirectAdd extends AppCompatActivity {
                             mRealm.copyToRealm(subjectSet);
                         }
                     });
-
-                    //finish();
+*/
+                    finish();
                 }
             }
         });

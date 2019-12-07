@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
+        Realm.setDefaultConfiguration(config);
         Realm realm = Realm.getInstance(config);
 
         //activity_main.xml에서 id로 객체 찾기
