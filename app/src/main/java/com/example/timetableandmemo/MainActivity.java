@@ -2,6 +2,7 @@ package com.example.timetableandmemo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Realm 초기화
         Realm.init(this);
-        Realm realm = Realm.getDefaultInstance();
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm realm = Realm.getInstance(config);
 
         //activity_main.xml에서 id로 객체 찾기
         timetableTitle = findViewById(R.id.timetable_title);
@@ -50,8 +57,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //만들어진 시간표 객체가 존재하지 않으면 id0로 객체 하나 생성
+        if(!isTimetableVOExistInDB(realm)) {
+            createTimetableVO(realm, 0, ttManager.getTitle());
+        }
+
         //시간표 화면 구성하기 - TimeTableManager 동작
-        ttManager.setRealm(realm);
         ttManager.fillTimetableColumn_time(timetableColumn_time);
         ttManager.applyTitle(timetableTitle);
         for (int i = 0; i < 5; i++) ttManager.applyNumberOfColumnsBy5Minutes(timetableColumn_weekdays[i]);
@@ -66,7 +77,28 @@ public class MainActivity extends AppCompatActivity {
 //        tb1.setText("1");
 //        timetableColumn_weekdays[0].addView(tb1, gl);
 
+        RealmQuery<TimetableVO> query = realm.where(TimetableVO.class);
+        RealmResults<TimetableVO> results = query.findAll();
+        Log.d("확인로그",String.format("%d", results.size()));
 
+    }
 
+    //RealmDB내에 TimetableVO객체가 존재하는지 확인
+    private Boolean isTimetableVOExistInDB(Realm realm) {
+        RealmQuery<TimetableVO> query = realm.where(TimetableVO.class);
+        RealmResults<TimetableVO> results = query.findAll();
+        if(results.size() == 0) return false;
+        else return true;
+    }
+
+    //새로운 TimetableVO객체 생성
+    public void createTimetableVO(Realm realm, int id, final String title) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                TimetableVO vo = realm.createObject(TimetableVO.class);
+                vo.setTitle(title);
+            }
+        });
     }
 }
