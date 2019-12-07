@@ -1,16 +1,13 @@
 package com.example.timetableandmemo;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -41,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm realm = Realm.getInstance(config);
-        final Realm realm = Realm.getDefaultInstance();
 
         //activity_main.xml에서 id로 객체 찾기
         timetableTitle = (TextView)findViewById(R.id.timetable_title);
@@ -72,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //만들어진 시간표 객체가 존재하지 않으면 id0로 객체 하나 생성
+        //만들어진 시간표 객체가 존재하지 않으면 id=0로 객체 하나 생성
         if(!isTimetableVOExistInDB(realm)) {
             createTimetableVO(realm, 0, ttManager.getTitle());
         }
@@ -92,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
 //        tb1.setText("1");
 //        timetableColumn_weekdays[0].addView(tb1, gl);
 
-        RealmQuery<TimetableVO> query = realm.where(TimetableVO.class);
-        RealmResults<TimetableVO> results = query.findAll();
-        Log.d("확인로그",String.format("%d", results.size()));
+//        RealmQuery<TimetableVO> query = realm.where(TimetableVO.class);
+//        RealmResults<TimetableVO> results = query.findAll();
+//        Log.d("확인로그",String.format("%d", results.size()));
 
     }
 
@@ -116,5 +112,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
