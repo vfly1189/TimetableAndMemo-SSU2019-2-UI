@@ -6,6 +6,10 @@ import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+
 public class TimeTableManager {
 
     private String title = "DEFAULT TIMETABLE TITLE - TimeTableManager";
@@ -13,6 +17,7 @@ public class TimeTableManager {
     private int numberOfHours;
     private Context context;
     private TimetableVO currentTimetableVO;
+    private ArrayList<Block>[] blocksList = new ArrayList[5]; //0:월, 1:화, 2:수, 3:목, 4:금
 
     public TimeTableManager(Context context) {
         this.setContext(context);
@@ -44,6 +49,37 @@ public class TimeTableManager {
         this.numberOfHours = this.endingHour - this.startingHour + 1;
     }
 
+    //blocksList에 Space와 SubjectBlock을 차례로 요일별로 분류해서 추가
+    public void calculateBlocksList() {
+        String subjectName;
+        int minuteCount;
+
+        //currentTimetableVO의 SubjectBlock들의 정보를 blocksList에 요일별로 분류해서 추가
+        for(SubjectSet ss : currentTimetableVO.getSubjectSets()) {
+            subjectName = ss.getSubjectName();
+            for(SubjectBlock sb : ss.getSubjectBlocks()) {
+                Block block = new Block(sb);
+                switch (sb.getWeekday()) {
+                    case "월요일":
+                        this.blocksList[0].add(block);
+                        break;
+                    case "화요일":
+                        this.blocksList[1].add(block);
+                        break;
+                    case "수요일":
+                        this.blocksList[2].add(block);
+                        break;
+                    case "목요일":
+                        this.blocksList[3].add(block);
+                        break;
+                    case "금요일":
+                        this.blocksList[4].add(block);
+                        break;
+                }
+            }
+        }
+    }
+
     //시간표의 첫 행(요일 써져있는 행)을 array.xml 의 weekDay 리소스로 채움
     public void applyTimetableWeekdaysRowText(TableRow parentRow) {
         String[] weekDayTexts = this.context.getResources().getStringArray(R.array.weekDay);
@@ -68,4 +104,17 @@ public class TimeTableManager {
     public void applyTitle(TextView titleTextView) {
         titleTextView.setText(this.title);
     }
+}
+
+class Block {
+    private int minuteCount = 0;//이 블럭이 몇분의 공간을 차지하는지
+    @Nullable private SubjectBlock subjectBlock = null;//null이면 Space객체에 해당, 있으면 클릭할 수 있는 시간표 블럭에 해당
+
+    public Block() {}
+    public Block(SubjectBlock subjectBlock) { this.subjectBlock = subjectBlock; }
+
+    public int getMinuteCount() { return this.minuteCount; }
+    public void setMinuteCount(int minuteCount) {this.minuteCount = minuteCount; }
+    public SubjectBlock getSubjectBlock() { return this.subjectBlock; }
+    public void setSubjectBlock(SubjectBlock subjectBlock) { this.subjectBlock = subjectBlock; }
 }
