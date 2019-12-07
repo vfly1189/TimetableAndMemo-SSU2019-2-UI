@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     TextView timetableTitle;
     Button directAdd;
     Button selectAdd;
+    TableRow timetableWeekdaysRow;
     TableRow timetableContentRow;
     LinearLayout timetableColumn_time; //시간표의 첫열(시간 구분선)
     GridLayout[] timetableColumn_weekdays = new GridLayout[5]; //0: 월요일, 1: 화요일, 2: 수요일, 3: 목요일, 4: 금요일
@@ -41,11 +42,12 @@ public class MainActivity extends AppCompatActivity {
 
         //activity_main.xml에서 id로 객체 찾기
         timetableTitle = (TextView)findViewById(R.id.timetable_title);
-        directAdd = (Button)findViewById(R.id.directAdd);
-        timetableContentRow = (TableRow)findViewById(R.id.timetable_content_row);
         selectAdd = (Button)findViewById(R.id.selectAdd);
+        directAdd = (Button)findViewById(R.id.directAdd);
+        timetableWeekdaysRow = (TableRow)findViewById(R.id.timetable_weekdays_row);
+        timetableContentRow = (TableRow)findViewById(R.id.timetable_content_row);
 
-        //이후 사용할 timetableColumn_time과 timetableColumn_weekdays의 위치찾기
+        //이후 사용할 timetableColumn_time과 timetableColumn_weekdays 객체찾기
         timetableColumn_time = (LinearLayout) timetableContentRow.getChildAt(0);
         for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (GridLayout) timetableContentRow.getChildAt(i + 1);
 
@@ -102,8 +104,10 @@ public class MainActivity extends AppCompatActivity {
         ttManager.calculateStartingAndEndingTimes();
         ttManager.calculateNumberOfHours();
 
-        ttManager.fillTimetableColumn_time(timetableColumn_time);
+        ttManager.applyTimetableWeekdaysRowText(timetableWeekdaysRow);
         ttManager.applyTitle(timetableTitle);
+        ttManager.fillTimetableColumn_time(timetableColumn_time);
+
 //        for (int i = 0; i < 5; i++) ttManager.applyNumberOfColumnsBy5Minutes(timetableColumn_weekdays[i]);
 
         //테스트 코드

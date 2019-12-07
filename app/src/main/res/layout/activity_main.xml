@@ -32,7 +32,8 @@
         android:id="@+id/timetable_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TableRow>
+        <TableRow
+            android:id="@+id/timetable_weekdays_row">
             <Space/>
             <TextView android:text="MON" android:layout_weight="1"/>
             <TextView android:text="TUE" android:layout_weight="1"/>

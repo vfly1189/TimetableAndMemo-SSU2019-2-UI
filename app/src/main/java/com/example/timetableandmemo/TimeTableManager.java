@@ -1,7 +1,9 @@
 package com.example.timetableandmemo;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.LinearLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class TimeTableManager {
@@ -40,6 +42,16 @@ public class TimeTableManager {
     //startingHour과 endingHour로 시간표가 몇시간 짜리인지 계산
     public void calculateNumberOfHours() {
         this.numberOfHours = this.endingHour - this.startingHour + 1;
+    }
+
+    //시간표의 첫 행(요일 써져있는 행)을 array.xml 의 weekDay 리소스로 채움
+    public void applyTimetableWeekdaysRowText(TableRow parentRow) {
+        String[] weekDayTexts = this.context.getResources().getStringArray(R.array.weekDay);
+        for (int i = 0; i < 5; i++) {
+            TextView tv = (TextView)parentRow.getChildAt(i+1);
+            tv.setText(weekDayTexts[i]);
+            tv.setGravity(Gravity.CENTER);
+        }
     }
 
     //시작 시간 ~ 끝나는 시간으로 첫 열 채우기
