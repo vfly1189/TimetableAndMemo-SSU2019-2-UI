@@ -4,7 +4,7 @@ import io.realm.RealmObject;
 
 public class SubjectBlock extends RealmObject{
     private String classroomName; //강의실 이름
-    private String weekday; //요일
+    private String weekday; //요일-형식: "월요일", "화요일", "수요일", "목요일", "금요일"
 
     private int sTime_hour; //시작 시각의 '시' 부분
     private int sTime_min; //시작 시각의 '분' 부분
