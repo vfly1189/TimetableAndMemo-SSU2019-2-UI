@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         timetableWeekdaysRow = (TableRow)findViewById(R.id.timetable_weekdays_row);
         timetableContentRow = (TableRow)findViewById(R.id.timetable_content_row);
 
-        //이후 사용할 timetableColumn_time과 timetableColumn_weekdays 객체찾기
+        //이후 사용할 timetableColumn_time과 timetableColumn_weekdays 객체 찾기
         timetableColumn_time = (LinearLayout)timetableContentRow.getChildAt(0);
         for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (LinearLayout)timetableContentRow.getChildAt(i + 1);
 
@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         //TimeTableManager 설정 및 동작
-
         ttManager.setCurrentTimetableVO(this.ttVO);
         ttManager.setTitle();
         ttManager.calculateStartingAndEndingTimes();
@@ -124,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
         ttManager.applyTimetableWeekdaysRowText(timetableWeekdaysRow);
         ttManager.applyTitle(timetableTitle);
         ttManager.fillTimetableColumn_time(timetableColumn_time);
+
+        ttManager.fillTimetableContentRow(timetableColumn_weekdays);//테스트
 
         //Realm 객체 갯수 세는 테스트 코드
 //        RealmQuery<TimetableVO> query = realm.where(TimetableVO.class);

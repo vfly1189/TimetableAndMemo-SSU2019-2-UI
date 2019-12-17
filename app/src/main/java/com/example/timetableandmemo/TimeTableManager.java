@@ -2,13 +2,15 @@ package com.example.timetableandmemo;
 
 import android.content.Context;
 import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeMap;
 
 public class TimeTableManager {
 
@@ -17,7 +19,6 @@ public class TimeTableManager {
     private int numberOfHours;
     private Context context;
     private TimetableVO currentTimetableVO;
-    private ArrayList<Block>[] blocksList = new ArrayList[5]; //0:월, 1:화, 2:수, 3:목, 4:금
 
     public TimeTableManager(Context context) {
         this.setContext(context);
@@ -49,37 +50,6 @@ public class TimeTableManager {
         this.numberOfHours = this.endingHour - this.startingHour + 1;
     }
 
-    //blocksList에 Space와 SubjectBlock을 차례로 요일별로 분류해서 추가
-    public void calculateBlocksList() {
-        String subjectName;
-        int minuteCount;
-
-        //currentTimetableVO의 SubjectBlock들의 정보를 blocksList에 요일별로 분류해서 추가
-        for(SubjectSet ss : currentTimetableVO.getSubjectSets()) {
-            subjectName = ss.getSubjectName();
-            for(SubjectBlock sb : ss.getSubjectBlocks()) {
-                Block block = new Block(sb);
-                switch (sb.getWeekday()) {
-                    case "월요일":
-                        this.blocksList[0].add(block);
-                        break;
-                    case "화요일":
-                        this.blocksList[1].add(block);
-                        break;
-                    case "수요일":
-                        this.blocksList[2].add(block);
-                        break;
-                    case "목요일":
-                        this.blocksList[3].add(block);
-                        break;
-                    case "금요일":
-                        this.blocksList[4].add(block);
-                        break;
-                }
-            }
-        }
-    }
-
     //시간표의 첫 행(요일 써져있는 행)을 array.xml 의 weekDay 리소스로 채움
     public void applyTimetableWeekdaysRowText(TableRow parentRow) {
         String[] weekDayTexts = this.context.getResources().getStringArray(R.array.weekDay);
@@ -106,21 +76,105 @@ public class TimeTableManager {
         titleTextView.setText(this.title);
     }
 
-    //요일별 과목 칸을 5분단위로 쪼개는 함수
-//    public void applyNumberOfColumnsBy5Minutes(GridLayout weekdayLayout) {
-//        weekdayLayout.setRowCount(numberOfHours * 4);
-//    }
-}
+    //Hour과 Minute으로 나뉘어진 시간을 하나의 blockUnit의 cell(1분에 한칸)수로 변환
+    public int time2CellCount(int hour, int min) {
+        int blockUnitIndex;
+        blockUnitIndex = (hour - this.startingHour) * 60 + min;
+        return blockUnitIndex;
+    }
 
-class Block {
-    private int minuteCount = 0;//이 블럭이 몇분의 공간을 차지하는지
-    @Nullable private SubjectBlock subjectBlock = null;//null이면 Space객체에 해당, 있으면 클릭할 수 있는 시간표 블럭에 해당
+    //시간표 화면에 currentTimetalbeVO에 들어있는 SubjectBlock 모두 그리기
+    public void fillTimetableContentRow(LinearLayout[] timetableColumn_weekdays) {
+        int lastCellCount = time2CellCount(this.endingHour, 0);
 
-    public Block() {}
-    public Block(SubjectBlock subjectBlock) { this.subjectBlock = subjectBlock; }
+        TreeMap<Integer, String> subjectBlocksOrder_mon = new TreeMap<>();
+        TreeMap<Integer, String> subjectBlocksOrder_tue = new TreeMap<>();
+        TreeMap<Integer, String> subjectBlocksOrder_wed = new TreeMap<>();
+        TreeMap<Integer, String> subjectBlocksOrder_thu = new TreeMap<>();
+        TreeMap<Integer, String> subjectBlocksOrder_fri = new TreeMap<>();
 
-    public int getMinuteCount() { return this.minuteCount; }
-    public void setMinuteCount(int minuteCount) {this.minuteCount = minuteCount; }
-    public SubjectBlock getSubjectBlock() { return this.subjectBlock; }
-    public void setSubjectBlock(SubjectBlock subjectBlock) { this.subjectBlock = subjectBlock; }
+        for(int i = 0; i < 5; i++){ timetableColumn_weekdays[i].removeAllViews(); }//시간표에 들어있는 과목 block을 한번 지움
+
+        //subjectBlocksOrder에 과목명:시작시각을 요일별로 분류해서 저장
+        for(SubjectSet ss : currentTimetableVO.getSubjectSets()) {
+            String currentSubjectName = ss.getSubjectName();
+            for(SubjectBlock sb : ss.getSubjectBlocks()) {
+                switch (sb.getWeekday()) {
+                    case "월요일": subjectBlocksOrder_mon.put(time2CellCount(sb.getsTime_hour(), sb.getsTime_min()), currentSubjectName); break;
+                    case "화요일": subjectBlocksOrder_tue.put(time2CellCount(sb.getsTime_hour(), sb.getsTime_min()), currentSubjectName); break;
+                    case "수요일": subjectBlocksOrder_wed.put(time2CellCount(sb.getsTime_hour(), sb.getsTime_min()), currentSubjectName); break;
+                    case "목요일": subjectBlocksOrder_thu.put(time2CellCount(sb.getsTime_hour(), sb.getsTime_min()), currentSubjectName); break;
+                    case "금요일": subjectBlocksOrder_fri.put(time2CellCount(sb.getsTime_hour(), sb.getsTime_min()), currentSubjectName); break;
+                }
+            }
+        }
+
+        //각 subjectBlockOrder마다 Iterator생성
+        Iterator<Integer> treeMapIterator_mon = subjectBlocksOrder_mon.keySet().iterator();
+        Iterator<Integer> treeMapIterator_tue = subjectBlocksOrder_tue.keySet().iterator();
+        Iterator<Integer> treeMapIterator_wed = subjectBlocksOrder_wed.keySet().iterator();
+        Iterator<Integer> treeMapIterator_thu = subjectBlocksOrder_thu.keySet().iterator();
+        Iterator<Integer> treeMapIterator_fri = subjectBlocksOrder_fri.keySet().iterator();
+
+        //월요일
+        while(treeMapIterator_mon.hasNext()) {
+            int key = treeMapIterator_mon.next();
+            int lastEndingTimeCellCount = 0;
+            while(treeMapIterator_mon.hasNext()) {
+                Space spaceCell = new Space(this.context); //버튼을 놓기 앞서 넣을 빈칸
+                Button buttonCell = new Button(this.context); //과목 버튼
+                String subjectName = subjectBlocksOrder_mon.get(key); //과목명
+                SubjectBlock currentSubjectBlock = findSubjectBlock(subjectName, "월요일"); //현재 SubjectBlock
+
+                int endingTimeCellCount = time2CellCount(currentSubjectBlock.getfTime_hour(), currentSubjectBlock.getfTime_min());
+
+                //Space와 Button이 각각 차지해야할 공간을 계산
+                int spaceWeight = key - 1;
+                int buttonWeight = endingTimeCellCount - key;
+
+                LinearLayout.LayoutParams layoutParams_space = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, spaceWeight);
+                LinearLayout.LayoutParams layoutParams_button = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, buttonWeight);
+
+                timetableColumn_weekdays[0].addView(spaceCell, layoutParams_space);
+                timetableColumn_weekdays[0].addView(buttonCell, layoutParams_button);
+
+                lastEndingTimeCellCount = endingTimeCellCount;
+            }
+
+            //맨 마지막에 남는 공간을 채우는 용도의 Space
+            Space lastSpaceCell = new Space(this.context);
+            int lastSpaceWeight = lastCellCount - lastEndingTimeCellCount;
+            LinearLayout.LayoutParams layoutParams_lastSpace = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, lastSpaceWeight);
+            timetableColumn_weekdays[0].addView(lastSpaceCell, layoutParams_lastSpace);
+        }
+        //화요일
+        //수요일
+        //목요일
+        //금요일
+
+        //subjectBlocksOrder에 어떤 과목이 있는지 확인하는 테스트 코드
+//        while(treeMapIterator_mon.hasNext()) {
+//            int key = treeMapIterator_mon.next();
+//            Log.d("Mon", String.format("%d, %s", key, subjectBlocksOrder_mon.get(key)));
+//        }
+//        while(treeMapIterator_tue.hasNext()) {
+//            int key = treeMapIterator_tue.next();
+//            Log.d("Tue", String.format("%d, %s", key, subjectBlocksOrder_tue.get(key)));
+//        }
+
+    }
+
+    //과목명과 요일로 해당 SubjectBlock을 찾아 리턴
+    public SubjectBlock findSubjectBlock(String subjectName, String weekday) {
+        for(SubjectSet ss : currentTimetableVO.getSubjectSets()) {
+            if(ss.getSubjectName() == subjectName) {
+                for(SubjectBlock sb : ss.getSubjectBlocks()) {
+                    if(sb.getWeekday() == weekday) {
+                        return sb;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }
