@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         ttManager.applyTitle(timetableTitle);
         ttManager.fillTimetableColumn_time(timetableColumn_time);
 
-        ttManager.fillTimetableContentRow(timetableColumn_weekdays);//테스트
+        for(int i = 0; i < 5; i ++) ttManager.fillTimetableContentRow(timetableColumn_weekdays[i], i);
 
         //Realm 객체 갯수 세는 테스트 코드
 //        RealmQuery<TimetableVO> query = realm.where(TimetableVO.class);
