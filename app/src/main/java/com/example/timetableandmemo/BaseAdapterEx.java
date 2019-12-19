@@ -1,6 +1,7 @@
 package com.example.timetableandmemo;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.example.timetableandmemo.R;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -121,13 +124,18 @@ public class BaseAdapterEx extends BaseAdapter {
                 int Chour[] = {data.mCshour,data.mCfhour};
                 int Cmin[] = {data.mCsmin,data.mCfmin};
 
+                //Toast.makeText(mContext,Integer.toString(data.mCshour),Toast.LENGTH_SHORT).show();
+
 
                 //강의실 정보 배열화
                 String room[] = new String[2];
                 room[0] = data.mRoom1;
                 room[1] = data.mRoom2;
 
+
                 SubjectBlock[] subjectBlocks = new SubjectBlock[count];
+
+                //요일 4개짜리
                 if(count == 4)
                 {
                     subjectBlocks[0] = new SubjectBlock(room[0],weekDayData[0],Chour[0],Cmin[0],Chour[1],Cmin[1]);
@@ -135,20 +143,35 @@ public class BaseAdapterEx extends BaseAdapter {
                     subjectBlocks[2] = new SubjectBlock(room[0],weekDayData[2],Chour[0],Cmin[0],Chour[1],Cmin[1]);
                     subjectBlocks[3] = new SubjectBlock(room[0],weekDayData[3],Chour[0],Cmin[0],Chour[1],Cmin[1]);
                 }
+                //요일 2개짜리
                 else if(count == 2)
                 {
-                    for(int i=0; i<count; i++)
+                    if(Chour[0] > 0)
                     {
-                        subjectBlocks[i] = new SubjectBlock(room[i],weekDayData[i],startHour[i],startMin[i],endHour[i],endMin[i]);
+                        for(int i=0; i<count; i++)
+                        {
+                            subjectBlocks[i] = new SubjectBlock(room[i],weekDayData[i],Chour[0],Cmin[0],Chour[1],Cmin[1]);
+                        }
+                    }
+                    else if(startHour[0] > 0)
+                    {
+                        for(int i=0; i<count; i++)
+                        {
+                            subjectBlocks[i] = new SubjectBlock(room[i],weekDayData[i],startHour[i],startMin[i],endHour[i],endMin[i]);
+                        }
                     }
                 }
-
-
+                //요일 1개 짜리
+                else if(count == 1)
+                {
+                    subjectBlocks[0] = new SubjectBlock(room[0],weekDayData[0],Chour[0],Cmin[0],Chour[1],Cmin[1]);
+                }
 
                 final SubjectSet input = new SubjectSet(data.mSname,data.mName);
+
                 for(int i=0; i<count; i++) input.add(subjectBlocks[i]);
 
-                Realm mRealm = Realm.getDefaultInstance();
+                final Realm mRealm = Realm.getDefaultInstance();
                 final TimetableVO ttVO = (TimetableVO)mRealm.where(TimetableVO.class).equalTo("id",0).findFirst();
                 mRealm.executeTransaction(new Realm.Transaction() {
                     @Override
