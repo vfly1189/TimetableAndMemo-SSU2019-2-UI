@@ -158,6 +158,10 @@ public class TimeTableManager {
                         public void onClick(DialogInterface dialog, int which) {
                             MainActivity.deleteSubjectSet(subjectName);
                             Toast.makeText(context, String.format("'%s'이(가) 삭제됨", subjectName), Toast.LENGTH_SHORT).show();
+                            //FLAG_ACTIVITY_SINGLE_TOP으로 onResume() 강제 호출
+                            Intent intent = new Intent(context, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            context.startActivity(intent);
                         }
                     });
                     builder.setNegativeButton("아니오", null);
