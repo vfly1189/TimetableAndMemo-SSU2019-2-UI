@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="5"
+    android:weightSum="15"
     android:padding="10dp"
     android:orientation="horizontal">
 
@@ -12,12 +12,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="30dp"
-        android:layout_weight="4"/>
+        android:layout_weight="11"/>
     <TextView
         android:id="@+id/Dday"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:textSize="30dp"/>
 
 <!--    <TextView-->
