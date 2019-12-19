@@ -96,17 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
         //DB에 저장되어있는 TimetableVO객체 가져오기
         this.ttVO = realm.where(TimetableVO.class).equalTo("id", 0).findFirst();
-
-
-        //테스트 코드
-//        Button tb1 = new Button(this);
-//        GridLayout.Spec rowSpec = GridLayout.spec(3,5);
-//        GridLayout.Spec columnSpec = GridLayout.spec(0);
-//        GridLayout.LayoutParams gl = new GridLayout.LayoutParams(rowSpec, columnSpec);
-//        gl.width = 0;
-//        gl.setGravity(Gravity.FILL);
-//        tb1.setText("1");
-//        timetableColumn_weekdays[0].addView(tb1, gl);
     }
 
 
@@ -123,21 +112,7 @@ public class MainActivity extends AppCompatActivity {
         ttManager.applyTimetableWeekdaysRowText(timetableWeekdaysRow);
         ttManager.applyTitle(timetableTitle);
         ttManager.fillTimetableColumn_time(timetableColumn_time);
-
-        for(int i = 0; i < 5; i ++) ttManager.fillTimetableContentRow(timetableColumn_weekdays[i], i);
-
-        //Realm 객체 갯수 세는 테스트 코드
-//        RealmQuery<TimetableVO> query = realm.where(TimetableVO.class);
-//        RealmResults<TimetableVO> results = query.findAll();
-//        Log.d("TimetableVO",String.format("%d개", results.size()));
-//
-//        RealmQuery<SubjectSet> query2 = realm.where(SubjectSet.class);
-//        RealmResults<SubjectSet> results2 = query2.findAll();
-//        Log.d("SubjectSet",String.format("%d개", results2.size()));
-//
-//        RealmQuery<SubjectBlock> query3 = realm.where(SubjectBlock.class);
-//        RealmResults<SubjectBlock> results3 = query3.findAll();
-//        Log.d("SubjectBlock",String.format("%d개", results3.size()));
+        for(int i = 0; i < 5; i ++) ttManager.fillTimetableContentRow(timetableColumn_weekdays[i], i); //각 요일에 SubjectBlock 배치
     }
 
     //RealmDB내에 TimetableVO객체가 존재하는지 확인
