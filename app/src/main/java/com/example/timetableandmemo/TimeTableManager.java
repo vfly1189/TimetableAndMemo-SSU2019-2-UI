@@ -1,5 +1,6 @@
 package com.example.timetableandmemo;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ public class TimeTableManager {
     private int numberOfHours;
     private Context context;
     private TimetableVO currentTimetableVO;
+    private AlertDialog deletSubjectSetDialog;
 
     public TimeTableManager(Context context) {
         this.setContext(context);
@@ -90,7 +92,7 @@ public class TimeTableManager {
         String[] weekDayTexts = this.context.getResources().getStringArray(R.array.weekDay);
         String currentWeekday = weekDayTexts[weekdayIndex]; //현재 요일 String으로 받아오기
 
-        TreeMap<Integer, String> subjectBlocksOrder = new TreeMap<>();
+        final TreeMap<Integer, String> subjectBlocksOrder = new TreeMap<>();
 
         for(int i = 0; i < 5; i++){ timetableColumn_weekday.removeAllViews(); }//시간표 해당 요일에 들어있는 과목 block을 한번 지움
 
@@ -120,12 +122,30 @@ public class TimeTableManager {
             LinearLayout.LayoutParams layoutParams_button = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, buttonWeight);
 
             //buttonCell의 기타 attribute 설정
-            buttonCell.setText(String.format("%s\n(%s)", subjectName, currentSubjectBlock.getClassroomName()));
+            buttonCell.setText(String.format("%s\n(%s)", subjectName, currentSubjectBlock.getClassroomName())); //버튼에 과목명과 강의실 표시
             buttonCell.setBackgroundColor(0x5f000000 + subjectName.hashCode() % 0x1000000); //(투명도) + (과목이름으로 생성된 컬러코드 중 색깔부분만 추출)
+
+            //버튼을 클릭했을 때의 동작
             buttonCell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("디버그", String.format("%s", subjectName));
+                    Log.d("디버그", String.format("%s 클릭됨", subjectName));
+                }
+            });
+
+            //버튼을 길게 눌렀을 때의 동작
+            buttonCell.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.d("디버그", String.format("%s 길게 눌림", subjectName));
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setTitle("과목 삭제");
+                    builder.setMessage(String.format("해당 과목(%s)을 정말 시간표에서 삭제하시겠습니까?", subjectName));
+                    builder.setPositiveButton("예", null);
+                    builder.setNegativeButton("아니오", null);
+                    deletSubjectSetDialog = builder.create();
+                    deletSubjectSetDialog.show();
+                    return true;
                 }
             });
 

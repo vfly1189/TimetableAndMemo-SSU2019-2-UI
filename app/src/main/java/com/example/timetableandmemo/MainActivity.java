@@ -81,10 +81,9 @@ public class MainActivity extends AppCompatActivity {
                 builder.setNegativeButton("취소", null);
                 titleChangeDialog = builder.create();
                 titleChangeDialog.show();
-                return false;
+                return true;
             }
         });
-
 
         //'+'버튼 클릭시 동작
         buttonSubjectAdd.setOnClickListener(new View.OnClickListener() {
@@ -140,9 +139,6 @@ public class MainActivity extends AppCompatActivity {
                     ttVO1.addSubjectSet(ss2);
                 }
             });
-            ttManager.setCurrentTimetableVO(ttVO1);
-            ttManager.setTitle();
-
             /// 테스트> ///
         }
 
