@@ -30,11 +30,12 @@ public class AddTestAndAssignment extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Realm.init(this);
+        //Realm.init(this);
+        /*
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build();
-
+        */
 
         setContentView(R.layout.activity_add_test_and_assignment);
         TextView subjectName = findViewById(R.id.Sname);
@@ -48,7 +49,8 @@ public class AddTestAndAssignment extends AppCompatActivity implements View.OnCl
 
         //Intent intent = getIntent();
         //String name = intent.getStringExtra("subjectName");
-        Realm mRealm = Realm.getInstance(config);
+        //Realm mRealm = Realm.getInstance(config);
+        Realm mRealm = Realm.getDefaultInstance();
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
