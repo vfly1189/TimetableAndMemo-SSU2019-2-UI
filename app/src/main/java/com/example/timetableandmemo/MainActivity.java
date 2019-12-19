@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     AlertDialog titleChangeDialog;
     AlertDialog selectAddTypeDialog;
 
+    static Realm realm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(config);
-        final Realm realm = Realm.getInstance(config);
+//        final Realm realm = Realm.getInstance(config);
+        realm = Realm.getInstance(config);
 
         //activity_main.xml에서 id로 객체 찾기
         timetableTitle = (TextView)findViewById(R.id.timetable_title);
@@ -151,6 +154,17 @@ public class MainActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 TimetableVO vo = realm.createObject(TimetableVO.class);
                 vo.setTitle(title);
+            }
+        });
+    }
+
+    //받은 과목명에 해당하는 SubjectSet을 Realm에서 삭제
+    static public void deleteSubjectSet(String subjectName) {
+        final SubjectSet sb = realm.where(SubjectSet.class).equalTo("subjectName", subjectName).findFirst();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                sb.deleteFromRealm();
             }
         });
     }

@@ -3,6 +3,7 @@ package com.example.timetableandmemo;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.TreeMap;
 
@@ -151,7 +153,13 @@ public class TimeTableManager {
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     builder.setTitle("과목 삭제");
                     builder.setMessage(String.format("해당 과목(%s)을 정말 시간표에서 삭제하시겠습니까?", subjectName));
-                    builder.setPositiveButton("예", null);
+                    builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.deleteSubjectSet(subjectName);
+                            Toast.makeText(context, String.format("'%s'이(가) 삭제됨", subjectName), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     builder.setNegativeButton("아니오", null);
                     deletSubjectSetDialog = builder.create();
                     deletSubjectSetDialog.show();
