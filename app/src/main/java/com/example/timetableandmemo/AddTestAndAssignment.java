@@ -26,6 +26,8 @@ public class AddTestAndAssignment extends AppCompatActivity implements View.OnCl
     Button testAdd;
     Button assAdd;
 
+    String name = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +49,8 @@ public class AddTestAndAssignment extends AppCompatActivity implements View.OnCl
         testAdd.setOnClickListener(this);
         assAdd.setOnClickListener(this);
 
-        //Intent intent = getIntent();
-        //String name = intent.getStringExtra("subjectName");
+        Intent intent = getIntent();
+        name = intent.getStringExtra("subjectName");
         //Realm mRealm = Realm.getInstance(config);
         Realm mRealm = Realm.getDefaultInstance();
         mRealm.executeTransaction(new Realm.Transaction() {
@@ -70,7 +72,7 @@ public class AddTestAndAssignment extends AppCompatActivity implements View.OnCl
             }
         });
 
-        String name = "과목 이름";
+        //String name = "과목 이름";
         subjectName.setText(name);
 
         RealmResults<TestVO> testItem = mRealm.where(TestVO.class).equalTo("subjectName",name).findAll();
@@ -86,11 +88,11 @@ public class AddTestAndAssignment extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
        // Toast.makeText(this,"in",Toast.LENGTH_SHORT).show();
         if(v == testAdd) {
-            Testdialog testDialog = new Testdialog(this,"과목 이름",testAdapter);
+            Testdialog testDialog = new Testdialog(this, name,testAdapter);
             testDialog.callFunction();
         }
         else if(v == assAdd){
-            Assdialog assDialog = new Assdialog(this,"과목 이름",assAdapter);
+            Assdialog assDialog = new Assdialog(this,name,assAdapter);
             assDialog.callFunction();
         }
     }
