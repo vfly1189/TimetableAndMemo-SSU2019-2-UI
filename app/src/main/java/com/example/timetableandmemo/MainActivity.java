@@ -85,7 +85,17 @@ public class MainActivity extends AppCompatActivity {
                     SubjectSet ss = new SubjectSet("과목과목", "교수교수님");
                     ss.add(sb1);
                     ss.add(sb2);
+
+                    SubjectBlock sb3 = new SubjectBlock("강의실2", "수요일", 9, 30, 12, 0);
+                    SubjectBlock sb4 = new SubjectBlock("강의실2", "금요일", 12, 0, 15, 0);
+                    SubjectBlock sb5 = new SubjectBlock("강의실2", "화요일", 9, 15, 11, 0);
+                    SubjectSet ss2 = new SubjectSet("과아아목", "교오오수님");
+                    ss2.add(sb3);
+                    ss2.add(sb4);
+                    ss2.add(sb5);
+
                     ttVO1.addSubjectSet(ss);
+                    ttVO1.addSubjectSet(ss2);
                 }
             });
             ttManager.setCurrentTimetableVO(ttVO1);
