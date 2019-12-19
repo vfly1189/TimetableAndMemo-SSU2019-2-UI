@@ -9,7 +9,6 @@ import android.widget.Space;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.util.Iterator;
 import java.util.TreeMap;
 
 public class TimeTableManager {
@@ -103,52 +102,42 @@ public class TimeTableManager {
             }
         }
 
-        Iterator<Integer> treeMapIterator = subjectBlocksOrder.keySet().iterator();
-        while(treeMapIterator.hasNext()) {
-            int key = treeMapIterator.next();
-            int lastEndingTimeCellCount = 0; //SubjectBlock의 가장 늦은 위치의 시간을 저장하는 임시 저장소
-            while(treeMapIterator.hasNext()) {
-                Space spaceCell = new Space(this.context); //버튼을 놓기 앞서 넣을 빈칸
-                Button buttonCell = new Button(this.context); //과목 버튼
-                String subjectName = subjectBlocksOrder.get(key); //과목명
-                SubjectBlock currentSubjectBlock = findSubjectBlock(subjectName, currentWeekday); //현재 SubjectBlock
+        int lastEndingTimeCellCount = 0; //SubjectBlock의 가장 늦은 위치의 시간을 저장하는 임시 저장소
+        for(int key : subjectBlocksOrder.keySet()){
+            Space spaceCell = new Space(this.context); //버튼을 놓기 앞서 넣을 빈칸
+            Button buttonCell = new Button(this.context); //과목 버튼
+            String subjectName = subjectBlocksOrder.get(key); //과목명
+            SubjectBlock currentSubjectBlock = findSubjectBlock(subjectName, currentWeekday); //현재 SubjectBlock
 
-                int endingTimeCellCount = time2CellCount(currentSubjectBlock.getfTime_hour(), currentSubjectBlock.getfTime_min());
+            int endingTimeCellCount = time2CellCount(currentSubjectBlock.getfTime_hour(), currentSubjectBlock.getfTime_min());
 
-                //Space와 Button이 각각 차지해야할 공간을 계산
-                int spaceWeight = key - 1;
-                float buttonWeight = endingTimeCellCount - key;
+            //Space와 Button이 각각 차지해야할 공간을 계산
+            int spaceWeight = key - 1;
+            float buttonWeight = endingTimeCellCount - key;
 
-                LinearLayout.LayoutParams layoutParams_space = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, spaceWeight);
-                LinearLayout.LayoutParams layoutParams_button = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, buttonWeight);
+            LinearLayout.LayoutParams layoutParams_space = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, spaceWeight);
+            LinearLayout.LayoutParams layoutParams_button = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, buttonWeight);
 
-                timetableColumn_weekday.addView(spaceCell, layoutParams_space);
-                timetableColumn_weekday.addView(buttonCell, layoutParams_button);
+            timetableColumn_weekday.addView(spaceCell, layoutParams_space);
+            timetableColumn_weekday.addView(buttonCell, layoutParams_button);
 
-                lastEndingTimeCellCount = endingTimeCellCount;
-            }
+            lastEndingTimeCellCount = endingTimeCellCount;
 
-            //맨 마지막에 남는 공간을 채우는 용도의 Space
-            Space lastSpaceCell = new Space(this.context);
-            int lastSpaceWeight = lastCellCount - lastEndingTimeCellCount;
-            LinearLayout.LayoutParams layoutParams_lastSpace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, lastSpaceWeight);
-            timetableColumn_weekday.addView(lastSpaceCell, layoutParams_lastSpace);
+            Log.d("디버그", String.format("%s %d:%d~%d:%d (%d %s %d)", currentWeekday, currentSubjectBlock.getsTime_hour(), currentSubjectBlock.getsTime_min(), currentSubjectBlock.getfTime_hour(), currentSubjectBlock.getfTime_min(), key, subjectName, endingTimeCellCount));
         }
-
-
-        //subjectBlocksOrder에 어떤 과목이 있는지 확인하는 테스트 코드
-        while(treeMapIterator.hasNext()) {
-            int key = treeMapIterator.next();
-            Log.d("Subjects", String.format("%d, %s", key, subjectBlocksOrder.get(key)));
-        }
+        //맨 마지막에 남는 공간을 채우는 용도의 Space
+        Space lastSpaceCell = new Space(this.context);
+        int lastSpaceWeight = lastCellCount - lastEndingTimeCellCount;
+        LinearLayout.LayoutParams layoutParams_lastSpace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, lastSpaceWeight);
+        timetableColumn_weekday.addView(lastSpaceCell, layoutParams_lastSpace);
     }
 
     //과목명과 요일로 해당 SubjectBlock을 찾아 리턴
     public SubjectBlock findSubjectBlock(String subjectName, String weekday) {
         for(SubjectSet ss : currentTimetableVO.getSubjectSets()) {
-            if(ss.getSubjectName() == subjectName) {
+            if(subjectName.equals(ss.getSubjectName())) {
                 for(SubjectBlock sb : ss.getSubjectBlocks()) {
-                    if(sb.getWeekday() == weekday) {
+                    if(weekday.equals(sb.getWeekday())) {
                         return sb;
                     }
                 }
