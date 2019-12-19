@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -22,8 +21,6 @@ import io.realm.RealmResults;
 public class MainActivity extends AppCompatActivity {
 
     TextView timetableTitle;
-    Button directAdd;
-    Button selectAdd;
     ImageButton buttonSubjectAdd;
     TableRow timetableWeekdaysRow;
     TableRow timetableContentRow;
@@ -49,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         //activity_main.xml에서 id로 객체 찾기
         timetableTitle = (TextView)findViewById(R.id.timetable_title);
-        selectAdd = (Button)findViewById(R.id.selectAdd);
-        directAdd = (Button)findViewById(R.id.directAdd);
         buttonSubjectAdd = findViewById(R.id.button_subject_add);
         timetableWeekdaysRow = (TableRow)findViewById(R.id.timetable_weekdays_row);
         timetableContentRow = (TableRow)findViewById(R.id.timetable_content_row);
@@ -90,25 +85,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Select버튼 클릭시 동작
-        selectAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SubjectListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //ADD 버튼 클릭시 동작
-        directAdd.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(getApplicationContext(), DirectAdd.class);
-                startActivity(intent);
-            }
-        });
 
         //'+'버튼 클릭시 동작
         buttonSubjectAdd.setOnClickListener(new View.OnClickListener() {

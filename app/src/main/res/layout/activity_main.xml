@@ -18,26 +18,17 @@
             android:textSize="24dp"
             android:singleLine="true"
             android:gravity="center_vertical|center" />
-        <Button
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:text="SELECT"
-            android:id="@+id/selectAdd"/>
-        <Button
-            android:id="@+id/directAdd"
-            android:onClick="onClick"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="ADD" />
         <ImageButton
             android:id="@+id/button_subject_add"
             android:layout_width="40dp"
-            android:layout_height="match_parent"
+            android:layout_height="40dp"
             android:background="#00000000"
             android:src="@drawable/add_circle_icon"
             android:scaleType="centerInside"
-            android:layout_marginRight="2dp"
-            android:layout_marginLeft="2dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="3dp"
             android:tint="#9fffffff"/>
     </LinearLayout>
 
