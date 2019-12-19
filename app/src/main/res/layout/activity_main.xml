@@ -14,7 +14,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="TIMETABLE TITLE" />
+            android:text="TIMETABLE TITLE"
+            android:textSize="24dp"
+            android:singleLine="true"
+            android:gravity="center_vertical|center" />
         <Button
             android:layout_width="80dp"
             android:layout_height="wrap_content"

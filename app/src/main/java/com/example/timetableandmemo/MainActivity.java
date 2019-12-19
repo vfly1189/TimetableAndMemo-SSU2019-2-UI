@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         //만들어진 시간표 객체가 존재하지 않으면 id=0로 객체 하나 생성
         if(!isTimetableVOExistInDB(realm)) {
-            createTimetableVO(realm, 0, "Initial Title - MainActivity");
+            createTimetableVO(realm, 0, "길게 눌러 제목을 변경");
             /// 테스트< ///
             final TimetableVO ttVO1 = realm.where(TimetableVO.class).equalTo("id", 0).findFirst();
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     SubjectBlock sb3 = new SubjectBlock("강의실2", "수요일", 9, 30, 12, 0);
                     SubjectBlock sb4 = new SubjectBlock("강의실2", "금요일", 12, 0, 15, 0);
                     SubjectBlock sb5 = new SubjectBlock("강의실2", "화요일", 9, 15, 11, 0);
-                    SubjectSet ss2 = new SubjectSet("과아아목", "교오오수님");
+                    SubjectSet ss2 = new SubjectSet("이름이제법긴과아아목", "교오오수님");
                     ss2.add(sb3);
                     ss2.add(sb4);
                     ss2.add(sb5);

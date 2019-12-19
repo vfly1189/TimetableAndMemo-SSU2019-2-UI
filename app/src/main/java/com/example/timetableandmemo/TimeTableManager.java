@@ -111,13 +111,17 @@ public class TimeTableManager {
 
             int endingTimeCellCount = time2CellCount(currentSubjectBlock.getfTime_hour(), currentSubjectBlock.getfTime_min());
 
-            //Space와 Button이 각각 차지해야할 공간을 계산
+            //Space와 Button이 각각 차지해야할 공간을 계산 및 할당
             int spaceWeight = ((key - 1) - (lastEndingTimeCellCount + 1)) + 1;
             float buttonWeight = (endingTimeCellCount - key) + 1; //칸의 갯수는 endingCellCount - startingCellCount + 1
-
             LinearLayout.LayoutParams layoutParams_space = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, spaceWeight);
             LinearLayout.LayoutParams layoutParams_button = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, buttonWeight);
 
+            //buttonCell의 기타 attribute 설정
+            buttonCell.setText(String.format("%s\n-\n%s", subjectName, currentSubjectBlock.getClassroomName()));
+            buttonCell.setBackgroundColor(0x5f000000 + subjectName.hashCode() % 0x1000000); //투명도 + 과목이름으로 생성된 컬러코드 중 색깔부분만 추출
+
+            //시간표에 Block들 추가
             timetableColumn_weekday.addView(spaceCell, layoutParams_space);
             timetableColumn_weekday.addView(buttonCell, layoutParams_button);
 
