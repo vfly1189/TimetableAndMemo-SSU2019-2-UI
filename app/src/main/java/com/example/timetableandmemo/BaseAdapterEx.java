@@ -114,7 +114,16 @@ public class BaseAdapterEx extends BaseAdapter {
 
                 //유효한 요일데이터들
                 String[] weekDayData = new String[count];
-                for(int i=0; i<count; i++) weekDayData[i] = weekDay[i];
+                for(int i=0; i<count; i++)
+                {
+                    if(weekDay[i].equals("월")) weekDayData[i] = "월요일";
+                    else if(weekDay[i].equals("화")) weekDayData[i] = "화요일";
+                    else if(weekDay[i].equals("수")) weekDayData[i] = "수요일";
+                    else if(weekDay[i].equals("목")) weekDayData[i] = "목요일";
+                    else if(weekDay[i].equals("금")) weekDayData[i] = "금요일";
+                    else if(weekDay[i].equals("토")) weekDayData[i] = "토요일";
+                    else if(weekDay[i].equals("일")) weekDayData[i] = "일요일";
+                }
 
                 //시간 데이터들 배열화
                 int startHour[] = {data.mShour1,data.mShour2};
