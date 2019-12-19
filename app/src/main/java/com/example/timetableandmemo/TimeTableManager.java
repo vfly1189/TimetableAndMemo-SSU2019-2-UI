@@ -84,7 +84,7 @@ public class TimeTableManager {
 
     //시간표 화면에 currentTimetalbeVO에 들어있는 SubjectBlock 모두 그리기 <<<<<각각의 Linear Layout 별로 바꿔볼 것
     public void fillTimetableContentRow(LinearLayout timetableColumn_weekday, int weekdayIndex) {
-        int lastCellCount = time2CellCount(this.endingHour, 0); //시간표의 마지막 칸의 cellCount인덱스
+        int lastCellCount = time2CellCount(this.endingHour + 1, 0); //시간표의 마지막 칸의 cellCount인덱스
         String[] weekDayTexts = this.context.getResources().getStringArray(R.array.weekDay);
         String currentWeekday = weekDayTexts[weekdayIndex]; //현재 요일 String으로 받아오기
 
@@ -92,12 +92,12 @@ public class TimeTableManager {
 
         for(int i = 0; i < 5; i++){ timetableColumn_weekday.removeAllViews(); }//시간표 해당 요일에 들어있는 과목 block을 한번 지움
 
-        //subjectBlocksOrder에 해당 요일의 (시작시각 : 과목명)을 저장
+        //subjectBlocksOrder에 해당 요일의 (시작시각에 해당하는 index : 과목명)을 저장
         for(SubjectSet ss : currentTimetableVO.getSubjectSets()) {
             String currentSubjectName = ss.getSubjectName();
             for(SubjectBlock sb : ss.getSubjectBlocks()) {
                 if (currentWeekday.equals(sb.getWeekday())) {
-                    subjectBlocksOrder.put(time2CellCount(sb.getsTime_hour(), sb.getsTime_min()), currentSubjectName);
+                    subjectBlocksOrder.put(time2CellCount(sb.getsTime_hour(), sb.getsTime_min()) + 1, currentSubjectName); //시작 인덱스는 계산 값에 +1을 해야 정확한 위치에 들어감
                 }
             }
         }
@@ -112,8 +112,8 @@ public class TimeTableManager {
             int endingTimeCellCount = time2CellCount(currentSubjectBlock.getfTime_hour(), currentSubjectBlock.getfTime_min());
 
             //Space와 Button이 각각 차지해야할 공간을 계산
-            int spaceWeight = key - 1;
-            float buttonWeight = endingTimeCellCount - key;
+            int spaceWeight = ((key - 1) - (lastEndingTimeCellCount + 1)) + 1;
+            float buttonWeight = (endingTimeCellCount - key) + 1; //칸의 갯수는 endingCellCount - startingCellCount + 1
 
             LinearLayout.LayoutParams layoutParams_space = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, spaceWeight);
             LinearLayout.LayoutParams layoutParams_button = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, buttonWeight);
@@ -130,6 +130,7 @@ public class TimeTableManager {
         int lastSpaceWeight = lastCellCount - lastEndingTimeCellCount;
         LinearLayout.LayoutParams layoutParams_lastSpace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, lastSpaceWeight);
         timetableColumn_weekday.addView(lastSpaceCell, layoutParams_lastSpace);
+        Log.d("디버그", String.format("%s 마지막 Space %d %d %d", currentWeekday, lastCellCount, lastEndingTimeCellCount, lastSpaceWeight));
     }
 
     //과목명과 요일로 해당 SubjectBlock을 찾아 리턴
