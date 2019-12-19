@@ -40,7 +40,7 @@ public class TimeTableManager {
 
     //currentTimetableVO에 들어있는 과목들을 기반으로 startingTime과 EndingTime 계산
     public void calculateStartingAndEndingTimes() {
-        int minStartingHour = 23, maxEndingHour = 0;
+        int minStartingHour = 9, maxEndingHour = 15;
         for (SubjectSet ss : this.currentTimetableVO.getSubjectSets()) {
             for (SubjectBlock sb : ss.getSubjectBlocks()) {
                 if(minStartingHour > sb.getsTime_hour()) minStartingHour = sb.getsTime_hour();

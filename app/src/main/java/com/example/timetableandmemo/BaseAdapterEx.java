@@ -180,14 +180,75 @@ public class BaseAdapterEx extends BaseAdapter {
 
                 for(int i=0; i<count; i++) input.add(subjectBlocks[i]);
 
+
                 final Realm mRealm = Realm.getDefaultInstance();
                 final TimetableVO ttVO = (TimetableVO)mRealm.where(TimetableVO.class).equalTo("id",0).findFirst();
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        ttVO.addSubjectSet(input);
+
+                List<SubjectSet> Overlap = ttVO.getSubjectSets();
+                Iterator<SubjectSet> iteratorSet = Overlap.iterator();
+
+                int flag = 0;
+                while(iteratorSet.hasNext())
+                {
+                    SubjectSet alreadyExistSubjectSet = iteratorSet.next();
+
+                    List<SubjectBlock> alreadyExistSubjectBlock = alreadyExistSubjectSet.getSubjectBlocks();
+                    Iterator<SubjectBlock> alreadyExistIterator = alreadyExistSubjectBlock.iterator();
+                    List<SubjectBlock> newSubjectBlock = input.getSubjectBlocks();
+                    Iterator<SubjectBlock> newSubjectIterator = newSubjectBlock.iterator();
+
+                    while(alreadyExistIterator.hasNext())
+                    {
+                        SubjectBlock alreadyBlock = alreadyExistIterator.next();
+                        while(newSubjectIterator.hasNext())
+                        {
+                            SubjectBlock newBlock = newSubjectIterator.next();
+
+                            //요일이 같아야됨
+                            if(!(newBlock.getWeekday().equals(alreadyBlock.getWeekday()))) break;
+
+                            //안겹치는다는거
+                            int not_hour_diff = alreadyBlock.getsTime_hour() - newBlock.getfTime_hour();
+                            int not_min_diff = ((not_hour_diff * 60) + alreadyBlock.getsTime_min()) - newBlock.getfTime_min();
+
+                            int not_hour_diff2 = newBlock.getsTime_hour() - alreadyBlock.getfTime_hour();
+                            int not_min_diff2 = ((not_hour_diff2 * 60) + newBlock.getsTime_min()) - alreadyBlock.getfTime_min();
+
+
+                            if(not_min_diff > 0 || not_min_diff2 > 0)
+                            {
+                                break;
+                            }
+
+                            //겹치는지 판별
+                            int hour_diff = alreadyBlock.getfTime_hour() - newBlock.getsTime_hour();
+                            int min_diff = (hour_diff * 60 + alreadyBlock.getfTime_min()) - newBlock.getsTime_min();
+
+                            int hour_diff2 = newBlock.getfTime_hour() - alreadyBlock.getsTime_hour();
+                            int min_diff2 = (hour_diff2 * 60 + newBlock.getfTime_min()) - alreadyBlock.getsTime_min();
+
+                            if(min_diff > 0 || min_diff2 > 0) { flag = 1; break; }
+                        }
+                        if(flag == 1 ) break;
                     }
-                });
+                    if(flag == 1) break;
+                }
+
+
+                if(flag == 0)
+                {
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            ttVO.addSubjectSet(input);
+                        }
+                    });
+                }
+                else if(flag == 1)
+                {
+                    Toast.makeText(mContext,"겹치는 시간 존재",Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });

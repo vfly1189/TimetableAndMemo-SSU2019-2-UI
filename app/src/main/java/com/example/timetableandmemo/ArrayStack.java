@@ -2,6 +2,7 @@ package com.example.timetableandmemo;
 
 
 public class ArrayStack<T> {
+
     public int top;
     private int maxSize;
     private T[] stackArray;
