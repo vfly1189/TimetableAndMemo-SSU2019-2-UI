@@ -113,34 +113,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //만들어진 시간표 객체가 존재하지 않으면 id=0로 객체 하나 생성
-        if(!isTimetableVOExistInDB(realm)) {
-            createTimetableVO(realm, 0, "길게 눌러 제목을 변경");
-            /// 테스트< ///
-            final TimetableVO ttVO1 = realm.where(TimetableVO.class).equalTo("id", 0).findFirst();
-
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    SubjectBlock sb1 = new SubjectBlock("강의실1", "월요일", 10, 15, 13, 30);
-                    SubjectBlock sb2 = new SubjectBlock("강의실1", "화요일", 12, 0, 13, 0);
-                    SubjectSet ss = new SubjectSet("과목과목", "교수교수님");
-                    ss.add(sb1);
-                    ss.add(sb2);
-
-                    SubjectBlock sb3 = new SubjectBlock("강의실2", "수요일", 9, 30, 12, 0);
-                    SubjectBlock sb4 = new SubjectBlock("강의실2", "금요일", 12, 0, 15, 0);
-                    SubjectBlock sb5 = new SubjectBlock("강의실2", "화요일", 9, 15, 11, 0);
-                    SubjectSet ss2 = new SubjectSet("이름이제법긴과아아목", "교오오수님");
-                    ss2.add(sb3);
-                    ss2.add(sb4);
-                    ss2.add(sb5);
-
-                    ttVO1.addSubjectSet(ss);
-                    ttVO1.addSubjectSet(ss2);
-                }
-            });
-            /// 테스트> ///
-        }
+        if(!isTimetableVOExistInDB(realm)) { createTimetableVO(realm, 0, "길게 눌러 제목을 변경"); }
 
         //DB에 저장되어있는 TimetableVO객체 가져오기
         this.ttVO = realm.where(TimetableVO.class).equalTo("id", 0).findFirst();

@@ -1,7 +1,9 @@
 package com.example.timetableandmemo;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -125,11 +127,19 @@ public class TimeTableManager {
             buttonCell.setText(String.format("%s\n(%s)", subjectName, currentSubjectBlock.getClassroomName())); //버튼에 과목명과 강의실 표시
             buttonCell.setBackgroundColor(0x5f000000 + subjectName.hashCode() % 0x1000000); //(투명도) + (과목이름으로 생성된 컬러코드 중 색깔부분만 추출)
 
-            //버튼을 클릭했을 때의 동작
+            //버튼을 클릭했을 때의 동작 - AddTestAndAssignment 액티비티 호출
             buttonCell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d("디버그", String.format("%s 클릭됨", subjectName));
+                    Intent intent = new Intent();
+                    ComponentName componentName = new ComponentName(
+                            "com.example.timetableandmemo",
+                            "com.example.timetableandmemo.AddTestAndAssignment"
+                    );
+                    intent.putExtra("subjectName", subjectName);
+                    intent.setComponent(componentName);
+                    context.startActivity(intent);
                 }
             });
 
