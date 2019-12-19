@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     TextView timetableTitle;
     Button directAdd;
     Button selectAdd;
+    ImageButton buttonSubjectAdd;
     TableRow timetableWeekdaysRow;
     TableRow timetableContentRow;
     LinearLayout timetableColumn_time; //시간표의 첫열(시간 구분선)
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     TimeTableManager ttManager = new TimeTableManager(this); //TimeTableManager 객체 하나 생성
     TimetableVO ttVO;
     AlertDialog titleChangeDialog;
+    AlertDialog selectAddTypeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         timetableTitle = (TextView)findViewById(R.id.timetable_title);
         selectAdd = (Button)findViewById(R.id.selectAdd);
         directAdd = (Button)findViewById(R.id.directAdd);
+        buttonSubjectAdd = findViewById(R.id.button_subject_add);
         timetableWeekdaysRow = (TableRow)findViewById(R.id.timetable_weekdays_row);
         timetableContentRow = (TableRow)findViewById(R.id.timetable_content_row);
 
@@ -103,6 +107,33 @@ public class MainActivity extends AppCompatActivity {
             {
                 Intent intent = new Intent(getApplicationContext(), DirectAdd.class);
                 startActivity(intent);
+            }
+        });
+
+        //'+'버튼 클릭시 동작
+        buttonSubjectAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final CharSequence[] items = {"DB로부터 과목 추가", "직접 과목정보를 입력해서 추가"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setTitle("과목을 시간표에 추가");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(which == 0){
+                            //SubjectListActivity로 이동
+                            Intent intent = new Intent(getApplicationContext(), SubjectListActivity.class);
+                            startActivity(intent);
+                        } else if (which == 1) {
+                            //DirectAdd로 이동
+                            Intent intent = new Intent(getApplicationContext(), DirectAdd.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+                selectAddTypeDialog = builder.create();
+                selectAddTypeDialog.show();
             }
         });
 
