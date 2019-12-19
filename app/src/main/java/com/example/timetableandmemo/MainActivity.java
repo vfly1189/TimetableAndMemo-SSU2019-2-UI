@@ -3,7 +3,6 @@ package com.example.timetableandmemo;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         timetableTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.d("디버그", "오래눌림");
-
                 final EditText editText = new EditText(v.getContext());
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setTitle("시간표 제목 변경");
@@ -75,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                             public void execute(Realm realm) {
                                 //입력한 제목으로 DB Data변경
                                 ttVO.setTitle(inputTitle);
-
                                 //화면에서 제목 한번 갱신해주기
                                 ttManager.setTitle();
                                 ttManager.applyTitle(timetableTitle);

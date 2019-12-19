@@ -3,6 +3,7 @@ package com.example.timetableandmemo;
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Space;
@@ -66,6 +67,7 @@ public class TimeTableManager {
         for (int i = this.startingHour; i <= this.endingHour; i++) {
             TextView timeRow = new TextView(this.context);
             timeRow.setText(String.format("%d", i));
+            timeRow.setBackgroundResource(R.drawable.border_line_bottom);
             ttLayout.addView(timeRow, timeRowLayout);
         }
     }
@@ -106,7 +108,7 @@ public class TimeTableManager {
         for(int key : subjectBlocksOrder.keySet()){
             Space spaceCell = new Space(this.context); //버튼을 놓기 앞서 넣을 빈칸
             Button buttonCell = new Button(this.context); //과목 버튼
-            String subjectName = subjectBlocksOrder.get(key); //과목명
+            final String subjectName = subjectBlocksOrder.get(key); //과목명
             SubjectBlock currentSubjectBlock = findSubjectBlock(subjectName, currentWeekday); //현재 SubjectBlock
 
             int endingTimeCellCount = time2CellCount(currentSubjectBlock.getfTime_hour(), currentSubjectBlock.getfTime_min());
@@ -120,6 +122,12 @@ public class TimeTableManager {
             //buttonCell의 기타 attribute 설정
             buttonCell.setText(String.format("%s\n(%s)", subjectName, currentSubjectBlock.getClassroomName()));
             buttonCell.setBackgroundColor(0x5f000000 + subjectName.hashCode() % 0x1000000); //(투명도) + (과목이름으로 생성된 컬러코드 중 색깔부분만 추출)
+            buttonCell.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("디버그", String.format("%s", subjectName));
+                }
+            });
 
             //시간표에 Block들 추가
             timetableColumn_weekday.addView(spaceCell, layoutParams_space);

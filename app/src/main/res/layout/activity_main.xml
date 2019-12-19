@@ -38,11 +38,11 @@
         <TableRow
             android:id="@+id/timetable_weekdays_row">
             <Space/>
-            <TextView android:text="MON" android:layout_weight="1"/>
-            <TextView android:text="TUE" android:layout_weight="1"/>
-            <TextView android:text="WED" android:layout_weight="1"/>
-            <TextView android:text="THU" android:layout_weight="1"/>
-            <TextView android:text="FRI" android:layout_weight="1"/>
+            <TextView android:text="MON" android:background="@drawable/border_line" android:layout_weight="1"/>
+            <TextView android:text="TUE" android:background="@drawable/border_line" android:layout_weight="1"/>
+            <TextView android:text="WED" android:background="@drawable/border_line" android:layout_weight="1"/>
+            <TextView android:text="THU" android:background="@drawable/border_line" android:layout_weight="1"/>
+            <TextView android:text="FRI" android:background="@drawable/border_line" android:layout_weight="1"/>
         </TableRow>
         <TableRow
             android:id="@+id/timetable_content_row"
@@ -53,26 +53,31 @@
                 android:orientation="vertical" />
 
             <LinearLayout
+                android:background="@drawable/border_line_right"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical"/>
             <LinearLayout
+                android:background="@drawable/border_line_right"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical"/>
             <LinearLayout
+                android:background="@drawable/border_line_right"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical"/>
             <LinearLayout
+                android:background="@drawable/border_line_right"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:orientation="vertical"/>
             <LinearLayout
+                android:background="@drawable/border_line_right"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
