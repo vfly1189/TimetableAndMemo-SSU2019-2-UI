@@ -1,13 +1,17 @@
 package com.example.timetableandmemo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.realm.Realm;
@@ -24,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
     TableRow timetableContentRow;
     LinearLayout timetableColumn_time; //시간표의 첫열(시간 구분선)
     LinearLayout[] timetableColumn_weekdays = new LinearLayout[5]; //0: 월요일, 1: 화요일, 2: 수요일, 3: 목요일, 4: 금요일
-    TimeTableManager ttManager = new TimeTableManager(this);
+    TimeTableManager ttManager = new TimeTableManager(this); //TimeTableManager 객체 하나 생성
     TimetableVO ttVO;
+    AlertDialog titleChangeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(config);
-        Realm realm = Realm.getInstance(config);
+        final Realm realm = Realm.getInstance(config);
 
         //activity_main.xml에서 id로 객체 찾기
         timetableTitle = (TextView)findViewById(R.id.timetable_title);
@@ -51,14 +56,37 @@ public class MainActivity extends AppCompatActivity {
         timetableColumn_time = (LinearLayout)timetableContentRow.getChildAt(0);
         for (int i = 0; i < 5; i++) timetableColumn_weekdays[i] = (LinearLayout)timetableContentRow.getChildAt(i + 1);
 
-        //ADD 버튼 클릭시 동작
-        directAdd.setOnClickListener(new View.OnClickListener()
-        {
+        //제목 오래 누를 시의 동작 - 화면에 제목 바꿀 수 있는 다이얼로그 띄움
+        timetableTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(getApplicationContext(), DirectAdd.class);
-                startActivity(intent);
+            public boolean onLongClick(View v) {
+                Log.d("디버그", "오래눌림");
+
+                final EditText editText = new EditText(v.getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setTitle("시간표 제목 변경");
+                builder.setView(editText);
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final String inputTitle = editText.getText().toString();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                //입력한 제목으로 DB Data변경
+                                ttVO.setTitle(inputTitle);
+
+                                //화면에서 제목 한번 갱신해주기
+                                ttManager.setTitle();
+                                ttManager.applyTitle(timetableTitle);
+                            }
+                        });
+                    }
+                });
+                builder.setNegativeButton("취소", null);
+                titleChangeDialog = builder.create();
+                titleChangeDialog.show();
+                return false;
             }
         });
 
@@ -67,6 +95,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SubjectListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //ADD 버튼 클릭시 동작
+        directAdd.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getApplicationContext(), DirectAdd.class);
                 startActivity(intent);
             }
         });

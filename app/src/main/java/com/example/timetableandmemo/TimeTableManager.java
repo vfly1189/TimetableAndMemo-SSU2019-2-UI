@@ -118,8 +118,8 @@ public class TimeTableManager {
             LinearLayout.LayoutParams layoutParams_button = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, buttonWeight);
 
             //buttonCell의 기타 attribute 설정
-            buttonCell.setText(String.format("%s\n-\n%s", subjectName, currentSubjectBlock.getClassroomName()));
-            buttonCell.setBackgroundColor(0x5f000000 + subjectName.hashCode() % 0x1000000); //투명도 + 과목이름으로 생성된 컬러코드 중 색깔부분만 추출
+            buttonCell.setText(String.format("%s\n(%s)", subjectName, currentSubjectBlock.getClassroomName()));
+            buttonCell.setBackgroundColor(0x5f000000 + subjectName.hashCode() % 0x1000000); //(투명도) + (과목이름으로 생성된 컬러코드 중 색깔부분만 추출)
 
             //시간표에 Block들 추가
             timetableColumn_weekday.addView(spaceCell, layoutParams_space);
