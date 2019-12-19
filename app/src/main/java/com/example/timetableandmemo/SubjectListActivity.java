@@ -9,12 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,9 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-//import javax.security.auth.Subject;
+import io.realm.Realm;
 
-public class SubjectListActivity extends AppCompatActivity {
+public class SubjectListActivity extends AppCompatActivity{
 
     private static final String DATABASE_NAME = "SubjectDB.db";
     private static final String PACKAGE_DIR = "/data/data/com.example.timetableandmemo/databases";
@@ -68,6 +67,7 @@ public class SubjectListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_subject_list);
         initialize(getApplicationContext());
 
+        //mListView = (ListView)findViewById(R.id.list_view);
         editSearch = (EditText) findViewById(R.id.edit);
         mData = new ArrayList<Subject>();
         mDataShow = new ArrayList<Subject>();
@@ -127,6 +127,15 @@ public class SubjectListActivity extends AppCompatActivity {
                 fillter(searchText);
             }
         });
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+
     }
     public void fillter(String searchText) {
         mDataShow.clear();
@@ -151,6 +160,5 @@ public class SubjectListActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-
-    }
+}
 

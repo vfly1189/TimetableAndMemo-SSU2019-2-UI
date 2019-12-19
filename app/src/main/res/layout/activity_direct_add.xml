@@ -15,10 +15,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <EditText
+                android:id="@+id/lectureName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="과목명"/>
             <EditText
+                android:id="@+id/professorName"
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

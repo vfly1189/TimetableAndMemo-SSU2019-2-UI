@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -20,15 +21,23 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 
+import io.realm.Realm;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+
 public class DirectAdd extends AppCompatActivity {
 
     Button addBtn;
     Button okayAdd;
 
+    EditText lectureName;
+    EditText professorName;
+
+
     LinearLayout firstLL;
     Context context = this;
 
-    ArrayStack<LinearLayout> stack = new ArrayStack(10);
+    ArrayStack<LinearLayout> stack = new ArrayStack(20);
 
     int count = 0;
 
@@ -37,6 +46,8 @@ public class DirectAdd extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direct_add);
 
+        lectureName = (EditText)findViewById(R.id.lectureName);
+        professorName = (EditText)findViewById(R.id.professorName);
         firstLL = (LinearLayout) findViewById(R.id.firstLL);
         addBtn = (Button)findViewById(R.id.addBtn);
         okayAdd = (Button)findViewById(R.id.okayAdd);
@@ -52,10 +63,15 @@ public class DirectAdd extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int k = 0;
-                DirectInfo[] information = new DirectInfo[count];
-                for(int i=0; i<count; i++)
-                    information[i] = new DirectInfo();
 
+                if(lectureName.getText().toString().equals("") || professorName.getText().toString().equals(""))
+                {
+                Toast.makeText(context,"수업명과 교수명을 입력하세요",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //과목 set을 하나 만듬
+                final SubjectSet subjectSet = new SubjectSet(lectureName.getText().toString(),professorName.getText().toString());
 
                 if(stack.empty())
                 {
@@ -65,15 +81,29 @@ public class DirectAdd extends AppCompatActivity {
                 {
                     while(!stack.empty())
                     {
+                        String className = new String();
                         String start[] = new String[2];
                         String end[] = new String[2];
 
                         LinearLayout out = (LinearLayout) stack.top();
 
+                        EditText classInfo = (EditText)out.getChildAt(0);
+                        className = classInfo.getText().toString();
 
-                        stack.pop();
+                        if(className.equals(""))
+                        {
+                            Toast.makeText(context,"강의실명을 입력하세요",Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
-                        Button startBtn = (Button)out.getChildAt(1);
+                        LinearLayout out_child = (LinearLayout)out.getChildAt(1);
+
+                        Button startBtn = (Button)out_child.getChildAt(1);
+                        if((startBtn.getText()).equals("시작시각"))
+                        {
+                            Toast.makeText(getApplicationContext(),"시간을 입력하세요",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         StringTokenizer token1 = new StringTokenizer((String)startBtn.getText(),":");
                         int i=0;
                         while(token1.hasMoreTokens())
@@ -82,8 +112,12 @@ public class DirectAdd extends AppCompatActivity {
                             i++;
                         }
 
-
-                        Button endBtn = (Button)out.getChildAt(2);
+                        Button endBtn = (Button)out_child.getChildAt(2);
+                        if((endBtn.getText()).equals("종료시각"))
+                        {
+                            Toast.makeText(getApplicationContext(),"시간을 입력하세요",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         StringTokenizer token2 = new StringTokenizer((String)endBtn.getText(),":");
                         int j=0;
                         while(token2.hasMoreTokens())
@@ -92,20 +126,40 @@ public class DirectAdd extends AppCompatActivity {
                             j++;
                         }
 
-                        Button weekDay = (Button)out.getChildAt(0);
-
-
+                        Button weekDay = (Button)out_child.getChildAt(0);
 
                         int startHour = Integer.parseInt(start[0]);
                         int startMinute = Integer.parseInt(start[1]);
                         int endHour = Integer.parseInt(end[0]);
                         int endMinute = Integer.parseInt(end[1]);
-                        Log.d(this.getClass().getName(),"test123");
 
-                        information[k] = new DirectInfo((String)weekDay.getText(),startHour,startMinute,endHour,endMinute);
+                        //과목set에 Block추가
+                        SubjectBlock subjectBlock = new SubjectBlock(className,(String)weekDay.getText(),startHour,startMinute,endHour,endMinute);
+                        subjectSet.add(subjectBlock);
 
+                        stack.pop();
                         k++;
                     }
+
+                    final Realm mRealm = Realm.getDefaultInstance();
+                    final TimetableVO ttVO = (TimetableVO)mRealm.where(TimetableVO.class).equalTo("id",0).findFirst();
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            ttVO.addSubjectSet(subjectSet);
+                        }
+                    });
+                    //Toast.makeText(getApplicationContext(),"test",Toast.LENGTH_SHORT).show();
+                    //Realm.init(context);
+                    /*
+                    final Realm mRealm = Realm.getDefaultInstance();
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            mRealm.copyToRealm(subjectSet);
+                        }
+                    });
+*/
                     finish();
                 }
             }
@@ -116,11 +170,25 @@ public class DirectAdd extends AppCompatActivity {
 
     public void addInfo()
     {
+        LinearLayout newInfoGroup = new LinearLayout(context);
+        LinearLayout.LayoutParams newInfoGroupParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        newInfoGroupParams.topMargin= 50 ;
+        newInfoGroupParams.leftMargin= 60 ;
+        newInfoGroup.setOrientation(LinearLayout.VERTICAL);
+
+        //강의실명
+        EditText setClassRoom = new EditText(context);
+        setClassRoom.setHint("강의실명");
+
+        LinearLayout.LayoutParams classRoomParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        classRoomParams.rightMargin=120;
+        setClassRoom.setLayoutParams(classRoomParams);
+
+        //요일,시간 레이아웃
         LinearLayout newInfo = new LinearLayout(context);
         LinearLayout.LayoutParams newInfoParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        newInfoParams.topMargin = 50;
-        newInfoParams.leftMargin = 60;
         newInfo.setOrientation(LinearLayout.HORIZONTAL);
+        newInfo.setLayoutParams(newInfoParams);
 
         //요일선택
         final Button setWeekDay = new Button(context);
@@ -199,10 +267,12 @@ public class DirectAdd extends AppCompatActivity {
         newInfo.addView(setTime1,time1Pararms);
         newInfo.addView(setTime2,time2Pararms);
 
+        newInfoGroup.addView(setClassRoom,classRoomParams);
+        newInfoGroup.addView(newInfo);
 
-        firstLL.addView(newInfo,newInfoParams);
+        firstLL.addView(newInfoGroup,newInfoGroupParams);
 
-        stack.push(newInfo);
+        stack.push(newInfoGroup);
 
         firstLL.removeView(addBtn);
         firstLL.removeView(okayAdd);
