@@ -111,9 +111,9 @@ public class showAll extends AppCompatActivity {
             float diffX = initX - event.getRawX();
             if ((diffX < -30 )){
                 startActivity(new Intent(showAll.this, MainActivity.class));
-                overridePendingTransition(R.anim.move_right, R.anim.move_left);
+                overridePendingTransition(R.anim.move_left, R.anim.move_right);finish();
             }
-            finish();
+
         }
         return true;
     }

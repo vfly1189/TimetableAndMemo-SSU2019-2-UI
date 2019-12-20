@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             float diffX = initX - event.getRawX();
              if ((diffX > 30)) {
                  startActivity(new Intent(MainActivity.this, showAll.class));
-                 overridePendingTransition(R.anim.move_right, R.anim.move_left);
+                 //overridePendingTransition(R.anim.move_right, R.anim.move_left);
                  finish();
             }
         }
