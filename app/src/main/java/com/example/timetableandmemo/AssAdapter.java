@@ -1,6 +1,7 @@
 package com.example.timetableandmemo;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Calendar;
+import java.util.List;
 
 import io.realm.RealmResults;
 
 public class AssAdapter extends ArrayAdapter {
     Context context;
     int resId;
-    RealmResults<AssignmentVO> mData = null;
+    List<AssignmentVO> mData = null;
     Calendar tCalendar = Calendar.getInstance();
     Calendar dCalendar = Calendar.getInstance();
     int d_day;
@@ -25,7 +27,7 @@ public class AssAdapter extends ArrayAdapter {
     float d_millis;
 
 
-    public AssAdapter(Context context, int resId,RealmResults<AssignmentVO> data) {
+    public AssAdapter(Context context, int resId, List<AssignmentVO> data) {
         super(context,resId);
         this.context = context;
         this.resId = resId;
@@ -105,5 +107,22 @@ public class AssAdapter extends ArrayAdapter {
         return convertView;
 
 
+    }
+
+    public void add(List<AssignmentVO> addData){
+        Log.d("hi","add2");
+        for(int i=0;i<addData.size();i++){
+            mData.add(0, addData.get(i));
+        }
+        notifyDataSetChanged();
+    }
+    public void clear(){
+        Log.d("hi","clear");
+        mData.clear();
+        notifyDataSetChanged();
+    }
+    public void remove(int index){
+        mData.remove(index);
+        notifyDataSetChanged();
     }
 }

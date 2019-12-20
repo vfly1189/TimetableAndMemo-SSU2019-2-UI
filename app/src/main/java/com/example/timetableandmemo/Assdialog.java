@@ -19,17 +19,23 @@ import android.app.DatePickerDialog;
         import android.widget.Toast;
 
         import java.text.SimpleDateFormat;
-        import java.util.Calendar;
-        import java.util.Locale;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
         import io.realm.Realm;
         import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class Assdialog{
     private Context context;
     private String subjectName;
     int Year,Month,Day;
     int deadlineHour,deadlineMin;
+    List<AssignmentVO> assList = new ArrayList<AssignmentVO>();
     String changeHour, changeMin;
     AssAdapter assAdapter;
     Calendar myCalendar = Calendar.getInstance();
@@ -133,7 +139,32 @@ public class Assdialog{
                         }
                     });
                     dlg.dismiss();
-                    assAdapter.notifyDataSetChanged();
+                    RealmResults<AssignmentVO> assItem = mRealm.where(AssignmentVO.class).equalTo("subjectName",subjectName).findAll();
+                    assList = mRealm.copyFromRealm(assItem);
+                    Comparator<AssignmentVO> ass = new Comparator<AssignmentVO>(){
+                        @Override
+                        public int compare(AssignmentVO o1, AssignmentVO o2) {
+                            int year1 = Integer.parseInt(o1.getYear())*1000000;
+                            int year2 = Integer.parseInt(o2.getYear())*1000000;
+                            int month1 = Integer.parseInt(o1.getMonth())*10000;
+                            int month2 = Integer.parseInt(o2.getMonth())*10000;
+                            int day1 = Integer.parseInt(o1.getDay())*100;
+                            int day2 = Integer.parseInt(o2.getDay())*100;
+                            int hour1 = Integer.parseInt(o1.getDeadlineHour())*10;
+                            int hour2 = Integer.parseInt(o2.getDeadlineHour())*10;
+                            int min1 = Integer.parseInt(o1.getDeadlineMin());
+                            int min2 = Integer.parseInt(o2.getDeadlineMin());
+                            if(year1+month1+day1+hour1+min1>year2+month2+day2+hour2+min2)
+                                return -1;
+                            else if(year1+month1+day1+hour1+min1<year2+month2+day2+hour2+min2)
+                                return 1;
+                            else
+                                return 0;
+                        }
+                    };
+                    Collections.sort(assList,ass);
+                    assAdapter.clear();
+                    assAdapter.add(assList);
                 }
 
             }

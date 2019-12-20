@@ -1,6 +1,7 @@
 package com.example.timetableandmemo;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,14 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import io.realm.RealmResults;
 
-public class TestAdapter extends ArrayAdapter {
+public class TestAdapter extends ArrayAdapter<TestVO>{
     Context context;
     int resId;
-    RealmResults<TestVO> mData = null;
+    List<TestVO> mData = null;
     Calendar tCalendar = Calendar.getInstance();
     Calendar dCalendar = Calendar.getInstance();
 //    int tYear = tCalendar.get(Calendar.YEAR);
@@ -32,7 +34,7 @@ public class TestAdapter extends ArrayAdapter {
     float t_millis = tCalendar.getTimeInMillis()/86400000;
     float d_millis;
 
-    public TestAdapter(Context context, int resId,RealmResults<TestVO> data) {
+    public TestAdapter(Context context, int resId, List<TestVO> data) {
         super(context,resId);
         this.context = context;
         this.resId = resId;
@@ -106,5 +108,27 @@ public class TestAdapter extends ArrayAdapter {
 
         dDay.setText("D - "+String.valueOf(d_day));
         return convertView;
+    }
+
+    public void add(int index,TestVO addData){
+        Log.d("hi","add1");
+        mData.add(index,addData);
+        notifyDataSetChanged();
+    }
+    public void add(List<TestVO> addData){
+        Log.d("hi","add2");
+        for(int i=0;i<addData.size();i++){
+            mData.add(0, addData.get(i));
+        }
+        notifyDataSetChanged();
+    }
+    public void clear(){
+        Log.d("hi","clear");
+        mData.clear();
+        notifyDataSetChanged();
+    }
+    public void remove(int index){
+        mData.remove(index);
+        notifyDataSetChanged();
     }
 }

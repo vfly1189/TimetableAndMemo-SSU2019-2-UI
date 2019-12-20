@@ -13,6 +13,7 @@ public class AssignmentVO extends RealmObject {
     private String printTime;
 
 
+
     public String getSubjectName(){
         return this.subjectName;
     }
@@ -31,6 +32,7 @@ public class AssignmentVO extends RealmObject {
     }
     public String getPrintDate(){return this.printDate;}
     public String getPrintTime(){return this.printTime;}
+
 
     public void setSubjectName(String subjectName){
         this.subjectName = subjectName;

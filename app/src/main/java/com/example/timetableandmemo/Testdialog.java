@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,18 +20,27 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class Testdialog{
     private Context context;
     private String subjectName;
     int Year,Month,Day;
     int startHour,startMin;
+    List<TestVO> testList = new ArrayList<TestVO>();
     String changeHour, changeMin;
     TestAdapter testAdapter;
     Calendar myCalendar = Calendar.getInstance();
@@ -107,6 +118,7 @@ public class Testdialog{
         });
 
         okButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
 
@@ -132,9 +144,39 @@ public class Testdialog{
                             vo1.setPrintTime(time.getText().toString());
                         }
                     });
+
                     dlg.dismiss();
+                    RealmResults<TestVO> testItem = mRealm.where(TestVO.class).equalTo("subjectName",subjectName).findAll();
+                    testList = mRealm.copyFromRealm(testItem);
+                    Log.d("hi","생성");
                     Toast.makeText(context, date.getText().toString(), Toast.LENGTH_SHORT).show();
-                    testAdapter.notifyDataSetChanged();
+                    Log.d("hi","알림");
+                    Comparator<TestVO> test = new Comparator<TestVO>(){
+                        @Override
+                        public int compare(TestVO o1, TestVO o2) {
+                            int year1 = Integer.parseInt(o1.getYear())*1000000;
+                            int year2 = Integer.parseInt(o2.getYear())*1000000;
+                            int month1 = Integer.parseInt(o1.getMonth())*10000;
+                            int month2 = Integer.parseInt(o2.getMonth())*10000;
+                            int day1 = Integer.parseInt(o1.getDay())*100;
+                            int day2 = Integer.parseInt(o2.getDay())*100;
+                            int hour1 = Integer.parseInt(o1.getStartHour())*10;
+                            int hour2 = Integer.parseInt(o2.getStartHour())*10;
+                            int min1 = Integer.parseInt(o1.getStartMin());
+                            int min2 = Integer.parseInt(o2.getStartMin());
+                            if(year1+month1+day1+hour1+min1>year2+month2+day2+hour2+min2)
+                                return -1;
+                            else if(year1+month1+day1+hour1+min1<year2+month2+day2+hour2+min2)
+                                return 1;
+                            else
+                                return 0;
+                        }
+                    };
+                    Collections.sort(testList,test);
+                    testAdapter.clear();
+                    testAdapter.add(testList);
+                    Log.d("hi","끝");
+                    //testAdapter.notifyDataSetChanged();
                 }
 
             }
