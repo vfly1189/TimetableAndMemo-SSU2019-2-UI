@@ -19,6 +19,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import io.realm.Realm;
@@ -38,6 +40,8 @@ public class DirectAdd extends AppCompatActivity {
     Context context = this;
 
     ArrayStack<LinearLayout> stack = new ArrayStack(20);
+
+    int stackTop = -1;
 
     int count = 0;
 
@@ -63,10 +67,16 @@ public class DirectAdd extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int k = 0;
+                int flag=0;
+                
+                //처음
+                if(stackTop == -1) stackTop = stack.top;
+                //여러번
+                else stack.top = stackTop;
 
                 if(lectureName.getText().toString().equals("") || professorName.getText().toString().equals(""))
                 {
-                Toast.makeText(context,"수업명과 교수명을 입력하세요",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"수업명과 교수명을 입력하세요",Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -75,7 +85,11 @@ public class DirectAdd extends AppCompatActivity {
 
                 if(stack.empty())
                 {
-                    finish();
+                    List<SubjectBlock> temp = subjectSet.getSubjectBlocks();
+                    if(temp.isEmpty())
+                    {
+                        Toast.makeText(context,"과목을 추가해주세요",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else
                 {
@@ -143,24 +157,74 @@ public class DirectAdd extends AppCompatActivity {
 
                     final Realm mRealm = Realm.getDefaultInstance();
                     final TimetableVO ttVO = (TimetableVO)mRealm.where(TimetableVO.class).equalTo("id",0).findFirst();
-                    mRealm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            ttVO.addSubjectSet(subjectSet);
+
+                    List<SubjectSet> Overlap = ttVO.getSubjectSets();
+                    Iterator<SubjectSet> iteratorSet = Overlap.iterator();
+
+                    while(iteratorSet.hasNext())
+                    {
+                        SubjectSet alreadyExistSubjectSet = iteratorSet.next();
+
+                        List<SubjectBlock> alreadyExistSubjectBlock = alreadyExistSubjectSet.getSubjectBlocks();
+                        Iterator<SubjectBlock> alreadyExistIterator = alreadyExistSubjectBlock.iterator();
+                        List<SubjectBlock> newSubjectBlock = subjectSet.getSubjectBlocks();
+                        Iterator<SubjectBlock> newSubjectIterator = newSubjectBlock.iterator();
+
+                        while(alreadyExistIterator.hasNext())
+                        {
+                            SubjectBlock alreadyBlock = alreadyExistIterator.next();
+                            while(newSubjectIterator.hasNext())
+                            {
+                                SubjectBlock newBlock = newSubjectIterator.next();
+
+                                //요일이 같아야됨
+                                if(!(newBlock.getWeekday().equals(alreadyBlock.getWeekday()))) break;
+
+                                //안겹치는다는거
+                                int not_hour_diff = alreadyBlock.getsTime_hour() - newBlock.getfTime_hour();
+                                int not_min_diff = ((not_hour_diff * 60) + alreadyBlock.getsTime_min()) - newBlock.getfTime_min();
+
+                                int not_hour_diff2 = newBlock.getsTime_hour() - alreadyBlock.getfTime_hour();
+                                int not_min_diff2 = ((not_hour_diff2 * 60) + newBlock.getsTime_min()) - alreadyBlock.getfTime_min();
+
+
+                                if(not_min_diff > 0 || not_min_diff2 > 0)
+                                {
+                                    break;
+                                }
+
+                                //겹치는거
+                                int hour_diff = alreadyBlock.getfTime_hour() - newBlock.getsTime_hour();
+                                int min_diff = (hour_diff * 60 + alreadyBlock.getfTime_min()) - newBlock.getsTime_min();
+
+
+                                int hour_diff2 = newBlock.getfTime_hour() - alreadyBlock.getsTime_hour();
+                                int min_diff2 = (hour_diff2 * 60 + newBlock.getfTime_min()) - alreadyBlock.getsTime_min();
+
+                                if(min_diff > 0 || min_diff2 > 0) { flag = 1; break; }
+                            }
+                            if(flag == 1 ) break;
                         }
-                    });
-                    //Toast.makeText(getApplicationContext(),"test",Toast.LENGTH_SHORT).show();
-                    //Realm.init(context);
-                    /*
-                    final Realm mRealm = Realm.getDefaultInstance();
-                    mRealm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            mRealm.copyToRealm(subjectSet);
-                        }
-                    });
-*/
-                    finish();
+                        if(flag == 1) break;
+                    }
+
+                    //정상적인 접근(겹치시는 시간 없음)
+                    if(flag == 0)
+                    {
+                        mRealm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                ttVO.addSubjectSet(subjectSet);
+                            }
+                        });
+                        //정상종료시 0 초기화
+                        stackTop = -1;
+                        finish();
+                    }
+                    else if(flag == 1)
+                    {
+                        Toast.makeText(context,"겹치는 시간이 존재합니다.",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

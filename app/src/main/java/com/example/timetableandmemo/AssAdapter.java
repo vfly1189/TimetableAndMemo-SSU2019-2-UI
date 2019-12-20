@@ -53,7 +53,7 @@ public class AssAdapter extends ArrayAdapter {
         TextView deadlineMin;
         TextView printDate;
         TextView dDay;
-
+        TextView story;
 
         ViewHolder(View root) {
 //            subjectName = root.findViewById(R.id.printDate);
@@ -62,7 +62,8 @@ public class AssAdapter extends ArrayAdapter {
 //            deadlineHour = root.findViewById(R.id.startHour_test);
 //            deadlineMin = root.findViewById(R.id.startMin_test);
               printDate = root.findViewById(R.id.printDate);
-                dDay = root.findViewById(R.id.Dday);
+              dDay = root.findViewById(R.id.Dday);
+              story = root.findViewById(R.id.story);
         }
 
 
@@ -84,7 +85,7 @@ public class AssAdapter extends ArrayAdapter {
 //        TextView day = holder.day;
 //        TextView deadlineHour = holder.deadlineHour;
 //        TextView deadlineMin = holder.deadlineMin;
-          TextView printDate = holder.printDate;
+         TextView printDate = holder.printDate;
 
         final AssignmentVO vo = mData.get(position);
 //        subjectName.setText(vo.getSubjectName());
@@ -92,8 +93,12 @@ public class AssAdapter extends ArrayAdapter {
 //        day.setText(vo.getDay());
 //        deadlineHour.setText(vo.getDeadlineHour());
 //        deadlineMin.setText(vo.getDeadlineMin());
-          printDate.setText(vo.getPrintDate());
+         printDate.setText(vo.getPrintDate());
          TextView dDay = holder.dDay;
+
+        TextView story = holder.story;
+        story.setText(vo.getStory());
+
 
         dCalendar.set(Integer.parseInt(vo.getYear()),Integer.parseInt(vo.getMonth())-1,Integer.parseInt(vo.getDay()));
 //        dCalendar.set(2019,11,3);
@@ -103,6 +108,7 @@ public class AssAdapter extends ArrayAdapter {
         d_day = (int)count;
 
         dDay.setText("D - "+String.valueOf(d_day));
+
 
         return convertView;
 

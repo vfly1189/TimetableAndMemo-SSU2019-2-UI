@@ -65,11 +65,11 @@ public class Assdialog{
         dlg.show();
 
         // 커스텀 다이얼로그의 각 위젯들을 정의한다.
+        final EditText story = (EditText) dlg.findViewById(R.id.story_text);
         final EditText date = (EditText) dlg.findViewById(R.id.inputdate);
         final EditText time = (EditText) dlg.findViewById(R.id.inputtime);
         final Button okButton = (Button) dlg.findViewById(R.id.okButton);
         final Button cancelButton = (Button) dlg.findViewById(R.id.cancelButton);
-
 
         date.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -136,6 +136,7 @@ public class Assdialog{
                             vo1.setDeadlineMin(changeMin);
                             vo1.setPrintDate(date.getText().toString());
                             vo1.setPrintTime(time.getText().toString());
+                            vo1.setStory(story.getText().toString());
                         }
                     });
                     dlg.dismiss();

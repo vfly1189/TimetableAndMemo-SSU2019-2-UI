@@ -12,8 +12,9 @@ public class TestVO extends RealmObject {
     private String startMin;
     private String printDate;
     private String printTime;
+    private String story;
 
-
+    public String getStory() {return this.story; }
     public String getSubjectName(){
         return this.subjectName;
     }
@@ -33,6 +34,7 @@ public class TestVO extends RealmObject {
     public String getPrintDate(){return this.printDate;}
     public String getPrintTime(){return this.printTime;}
 
+    public void setStory(String story) {this.story = story;}
     public void setSubjectName(String subjectName){
         this.subjectName = subjectName;
     }
@@ -51,6 +53,4 @@ public class TestVO extends RealmObject {
     }
     public void setPrintDate(String printDate){this.printDate = printDate;}
     public void setPrintTime(String printTime){this.printTime = printTime;}
-
-
 }

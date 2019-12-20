@@ -61,6 +61,7 @@ public class TestAdapter extends ArrayAdapter<TestVO>{
         TextView startMin;
         TextView printDate;
         TextView dDay;
+        TextView story;
 
         ViewHolder(View root){
 //            subjectName = root.findViewById(R.id.subjectName_test);
@@ -70,6 +71,7 @@ public class TestAdapter extends ArrayAdapter<TestVO>{
 //            startMin = root.findViewById(R.id.startMin_test);
             printDate = root.findViewById(R.id.printDate);
             dDay = root.findViewById(R.id.Dday);
+            story = root.findViewById(R.id.story);
         }
     }
 
@@ -91,6 +93,8 @@ public class TestAdapter extends ArrayAdapter<TestVO>{
 //        TextView startMin = holder.startMin;
         TextView printDate = holder.printDate;
         TextView dDay = holder.dDay;
+        TextView story = holder.story;
+
         final TestVO vo = mData.get(position);
 //        subjectName.setText(vo.getSubjectName());
 //        month.setText(vo.getMonth());
@@ -98,6 +102,7 @@ public class TestAdapter extends ArrayAdapter<TestVO>{
 //        startHour.setText(vo.getStartHour());
 //        startMin.setText(vo.getStartMin());
           printDate.setText(vo.getPrintDate());
+          story.setText(vo.getStory());
 
         dCalendar.set(Integer.parseInt(vo.getYear()),Integer.parseInt(vo.getMonth())-1,Integer.parseInt(vo.getDay()));
 //        dCalendar.set(2019,11,3);
