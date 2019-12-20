@@ -1,8 +1,10 @@
 package com.example.timetableandmemo;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     TimetableVO ttVO;
     AlertDialog titleChangeDialog;
     AlertDialog selectAddTypeDialog;
+    float initX;
 
     static Realm realm;
 
@@ -173,4 +176,20 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            initX = event.getRawX();
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            float diffX = initX - event.getRawX();
+             if ((diffX > 30)) {
+                 startActivity(new Intent(MainActivity.this, showAll.class));
+                 overridePendingTransition(R.anim.move_right, R.anim.move_left);
+                 finish();
+            }
+        }
+        return true;
+    }
+
+
 }

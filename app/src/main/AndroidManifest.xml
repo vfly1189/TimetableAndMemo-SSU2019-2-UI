@@ -9,9 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddTestAndAssignment">
-
-        </activity>
+        <activity android:name=".showAll"></activity>
+        <activity android:name=".AddTestAndAssignment"></activity>
         <activity android:name=".SubjectListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
