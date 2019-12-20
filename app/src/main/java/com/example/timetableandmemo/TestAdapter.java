@@ -1,6 +1,7 @@
 package com.example.timetableandmemo;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +28,10 @@ public class TestAdapter extends ArrayAdapter<TestVO>{
     List<TestVO> mData = null;
     Calendar tCalendar = Calendar.getInstance();
     Calendar dCalendar = Calendar.getInstance();
-//    int tYear = tCalendar.get(Calendar.YEAR);
+    //    int tYear = tCalendar.get(Calendar.YEAR);
 //    int tMonth = tCalendar.get(Calendar.MONTH);
 //    int tDay = tCalendar.get(Calendar.DAY_OF_MONTH);
-      int d_day;
+    int d_day;
     float t_millis = tCalendar.getTimeInMillis()/86400000;
     float d_millis;
 
@@ -101,8 +102,8 @@ public class TestAdapter extends ArrayAdapter<TestVO>{
 //        day.setText(vo.getDay());
 //        startHour.setText(vo.getStartHour());
 //        startMin.setText(vo.getStartMin());
-          printDate.setText(vo.getPrintDate());
-          story.setText(vo.getStory());
+        printDate.setText(vo.getPrintDate());
+        story.setText(vo.getStory());
 
         dCalendar.set(Integer.parseInt(vo.getYear()),Integer.parseInt(vo.getMonth())-1,Integer.parseInt(vo.getDay()));
 //        dCalendar.set(2019,11,3);
@@ -112,6 +113,16 @@ public class TestAdapter extends ArrayAdapter<TestVO>{
         d_day = (int)count;
 
         dDay.setText("D - "+String.valueOf(d_day));
+
+        if(d_day <= 3)
+        {
+            dDay.setTextColor(Color.RED);
+        }
+        else
+        {
+            dDay.setTextColor(Color.BLACK);
+        }
+
         return convertView;
     }
 

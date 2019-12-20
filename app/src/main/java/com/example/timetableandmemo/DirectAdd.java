@@ -41,8 +41,8 @@ public class DirectAdd extends AppCompatActivity {
 
     ArrayStack<LinearLayout> stack = new ArrayStack(20);
 
+    //겹치는 시간 존재했을 시 스택 맨 위를 가리키게 할 변수
     int stackTop = -1;
-
     int count = 0;
 
     @Override
@@ -68,12 +68,13 @@ public class DirectAdd extends AppCompatActivity {
             public void onClick(View v) {
                 int k = 0;
                 int flag=0;
-                
+
                 //처음
                 if(stackTop == -1) stackTop = stack.top;
                 //여러번
                 else stack.top = stackTop;
 
+                //수업명과 교수명 입력안할 시 Toast
                 if(lectureName.getText().toString().equals("") || professorName.getText().toString().equals(""))
                 {
                     Toast.makeText(context,"수업명과 교수명을 입력하세요",Toast.LENGTH_SHORT).show();
@@ -83,6 +84,7 @@ public class DirectAdd extends AppCompatActivity {
                 //과목 set을 하나 만듬
                 final SubjectSet subjectSet = new SubjectSet(lectureName.getText().toString(),professorName.getText().toString());
 
+                //과목에 대한 요일,시간 설정을 안할시
                 if(stack.empty())
                 {
                     List<SubjectBlock> temp = subjectSet.getSubjectBlocks();
@@ -158,6 +160,7 @@ public class DirectAdd extends AppCompatActivity {
                     final Realm mRealm = Realm.getDefaultInstance();
                     final TimetableVO ttVO = (TimetableVO)mRealm.where(TimetableVO.class).equalTo("id",0).findFirst();
 
+                    //겹치는 시간 계산
                     List<SubjectSet> Overlap = ttVO.getSubjectSets();
                     Iterator<SubjectSet> iteratorSet = Overlap.iterator();
 

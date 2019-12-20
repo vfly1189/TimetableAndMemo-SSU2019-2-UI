@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,8 +35,8 @@ public class AddTestAndAssignment extends AppCompatActivity implements View.OnCl
 
     TestAdapter testAdapter;
     AssAdapter assAdapter;
-    Button testAdd;
-    Button assAdd;
+    ImageButton testAdd;
+    ImageButton assAdd;
     String name = null;
     List<TestVO> testList = new ArrayList<TestVO>();
     List<AssignmentVO> assList = new ArrayList<AssignmentVO>();

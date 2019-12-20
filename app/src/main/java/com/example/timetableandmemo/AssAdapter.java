@@ -1,6 +1,7 @@
 package com.example.timetableandmemo;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,9 +62,9 @@ public class AssAdapter extends ArrayAdapter {
 //            day = root.findViewById(R.id.day_test);
 //            deadlineHour = root.findViewById(R.id.startHour_test);
 //            deadlineMin = root.findViewById(R.id.startMin_test);
-              printDate = root.findViewById(R.id.printDate);
-              dDay = root.findViewById(R.id.Dday);
-              story = root.findViewById(R.id.story);
+            printDate = root.findViewById(R.id.printDate);
+            dDay = root.findViewById(R.id.Dday);
+            story = root.findViewById(R.id.story);
         }
 
 
@@ -85,7 +86,7 @@ public class AssAdapter extends ArrayAdapter {
 //        TextView day = holder.day;
 //        TextView deadlineHour = holder.deadlineHour;
 //        TextView deadlineMin = holder.deadlineMin;
-         TextView printDate = holder.printDate;
+        TextView printDate = holder.printDate;
 
         final AssignmentVO vo = mData.get(position);
 //        subjectName.setText(vo.getSubjectName());
@@ -93,8 +94,8 @@ public class AssAdapter extends ArrayAdapter {
 //        day.setText(vo.getDay());
 //        deadlineHour.setText(vo.getDeadlineHour());
 //        deadlineMin.setText(vo.getDeadlineMin());
-         printDate.setText(vo.getPrintDate());
-         TextView dDay = holder.dDay;
+        printDate.setText(vo.getPrintDate());
+        TextView dDay = holder.dDay;
 
         TextView story = holder.story;
         story.setText(vo.getStory());
@@ -109,6 +110,14 @@ public class AssAdapter extends ArrayAdapter {
 
         dDay.setText("D - "+String.valueOf(d_day));
 
+        if(d_day <= 3)
+        {
+            dDay.setTextColor(Color.RED);
+        }
+        else
+        {
+            dDay.setTextColor(Color.BLACK);
+        }
 
         return convertView;
 
