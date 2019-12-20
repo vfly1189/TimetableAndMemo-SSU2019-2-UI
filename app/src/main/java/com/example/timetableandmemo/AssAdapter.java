@@ -114,7 +114,10 @@ public class AssAdapter extends ArrayAdapter {
         {
             dDay.setTextColor(Color.RED);
         }
-
+        else
+        {
+            dDay.setTextColor(Color.BLACK);
+        }
 
         return convertView;
 

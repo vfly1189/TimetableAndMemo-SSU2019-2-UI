@@ -118,6 +118,10 @@ public class TestAdapter extends ArrayAdapter<TestVO>{
         {
             dDay.setTextColor(Color.RED);
         }
+        else
+        {
+            dDay.setTextColor(Color.BLACK);
+        }
 
         return convertView;
     }
