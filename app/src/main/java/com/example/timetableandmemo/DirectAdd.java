@@ -68,8 +68,7 @@ public class DirectAdd extends AppCompatActivity {
             public void onClick(View v) {
                 int k = 0;
                 int flag=0;
-
-
+                
                 //처음
                 if(stackTop == -1) stackTop = stack.top;
                 //여러번
@@ -156,10 +155,8 @@ public class DirectAdd extends AppCompatActivity {
                         k++;
                     }
 
-
                     final Realm mRealm = Realm.getDefaultInstance();
                     final TimetableVO ttVO = (TimetableVO)mRealm.where(TimetableVO.class).equalTo("id",0).findFirst();
-
 
                     List<SubjectSet> Overlap = ttVO.getSubjectSets();
                     Iterator<SubjectSet> iteratorSet = Overlap.iterator();
@@ -196,8 +193,6 @@ public class DirectAdd extends AppCompatActivity {
                                     break;
                                 }
 
-
-
                                 //겹치는거
                                 int hour_diff = alreadyBlock.getfTime_hour() - newBlock.getsTime_hour();
                                 int min_diff = (hour_diff * 60 + alreadyBlock.getfTime_min()) - newBlock.getsTime_min();
@@ -213,12 +208,9 @@ public class DirectAdd extends AppCompatActivity {
                         if(flag == 1) break;
                     }
 
-                    //Toast.makeText(context,Integer.toString(flag),Toast.LENGTH_SHORT).show();
-
-
+                    //정상적인 접근(겹치시는 시간 없음)
                     if(flag == 0)
                     {
-                        //Toast.makeText(context,Integer.toString(flag),Toast.LENGTH_SHORT).show();
                         mRealm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -231,24 +223,8 @@ public class DirectAdd extends AppCompatActivity {
                     }
                     else if(flag == 1)
                     {
-                        //Toast.makeText(context,"겹치는 시간 존재",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"겹치는 시간이 존재합니다.",Toast.LENGTH_SHORT).show();
                     }
-
-
-
-
-
-                    //Toast.makeText(getApplicationContext(),"test",Toast.LENGTH_SHORT).show();
-                    //Realm.init(context);
-                    /*
-                    final Realm mRealm = Realm.getDefaultInstance();
-                    mRealm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            mRealm.copyToRealm(subjectSet);
-                        }
-                    });
-*/
                 }
             }
         });
