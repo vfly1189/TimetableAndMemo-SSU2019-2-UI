@@ -218,7 +218,7 @@ public class DirectAdd extends AppCompatActivity {
 
                     if(flag == 0)
                     {
-                        Toast.makeText(context,Integer.toString(flag),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context,Integer.toString(flag),Toast.LENGTH_SHORT).show();
                         mRealm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -231,7 +231,7 @@ public class DirectAdd extends AppCompatActivity {
                     }
                     else if(flag == 1)
                     {
-                        Toast.makeText(context,"겹치는 시간 존재",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context,"겹치는 시간 존재",Toast.LENGTH_SHORT).show();
                     }
 
 

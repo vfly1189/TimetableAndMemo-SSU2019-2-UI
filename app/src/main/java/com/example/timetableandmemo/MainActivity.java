@@ -161,11 +161,16 @@ public class MainActivity extends AppCompatActivity {
     //받은 과목명에 해당하는 SubjectSet을 Realm에서 삭제
     static public void deleteSubjectSet(String subjectName) {
         final SubjectSet sb = realm.where(SubjectSet.class).equalTo("subjectName", subjectName).findFirst();
+        final RealmResults<TestVO> testVO = realm.where(TestVO.class).equalTo("subjectName",subjectName).findAll();
+        final RealmResults<AssignmentVO> assignmentVO = realm.where(AssignmentVO.class).equalTo("subjectName",subjectName).findAll();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 sb.deleteFromRealm();
+                testVO.deleteAllFromRealm();
+                assignmentVO.deleteAllFromRealm();
             }
         });
+
     }
 }
